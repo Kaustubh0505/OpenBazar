@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///Users/kaustubhhiwanj/E-comm-express/frontend/app/auth/login/page.js"],"sourcesContent":["export default function LoginPage() {\n    return (\n      <div>\n        <h1>Login</h1>\n  \n        <form>\n          <input type=\"email\" placeholder=\"Email\" />\n          <br />\n          <input type=\"password\" placeholder=\"Password\" />\n          <br />\n          <button type=\"submit\">Login</button>\n        </form>\n      </div>\n    );\n  }\n  "],"names":[],"mappings":";;;;;;AAAe,SAAS;IACpB,qBACE,8OAAC;;0BACC,8OAAC;0BAAG;;;;;;0BAEJ,8OAAC;;kCACC,8OAAC;wBAAM,MAAK;wBAAQ,aAAY;;;;;;kCAChC,8OAAC;;;;;kCACD,8OAAC;wBAAM,MAAK;wBAAW,aAAY;;;;;;kCACnC,8OAAC;;;;;kCACD,8OAAC;wBAAO,MAAK;kCAAS;;;;;;;;;;;;;;;;;;AAI9B"}},
+    {"offset": {"line": 93, "column": 0}, "map": {"version":3,"sources":["file:///Users/kaustubhhiwanj/E-comm-express/frontend/app/page.js"],"sourcesContent":["import SignupPage from \"./auth/signup/page\";\n\nexport default function Home() {\n  return (\n    <SignupPage/>\n  );\n}\n"],"names":[],"mappings":";;;;;AAAA;;;AAEe,SAAS;IACtB,qBACE,8OAAC,wIAAU;;;;;AAEf"}}]
+}

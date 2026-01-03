@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///Users/kaustubhhiwanj/E-comm-express/frontend/app/auth/login/page.js"],"sourcesContent":["\nimport { useRouter } from \"react\";\nexport default function LoginPage() {\n    const router = useRouter()\n    return (\n      <div>\n        <h1>Login</h1>\n  \n        <form>\n          <input type=\"email\" placeholder=\"Email\" />\n          <br />\n          <input type=\"password\" placeholder=\"Password\" />\n          <br />\n          <button type=\"submit\">Login</button>\n        </form>\n        <p>Create a new account</p>\n          <button onClick={()=>router.push('auth/signup')} type=\"submit\">Signup</button>\n      </div>\n    );\n  }\n  "],"names":[],"mappings":";;;;;AACA;;;AACe,SAAS;IACpB,MAAM,SAAS,IAAA,kNAAS;IACxB,qBACE,8OAAC;;0BACC,8OAAC;0BAAG;;;;;;0BAEJ,8OAAC;;kCACC,8OAAC;wBAAM,MAAK;wBAAQ,aAAY;;;;;;kCAChC,8OAAC;;;;;kCACD,8OAAC;wBAAM,MAAK;wBAAW,aAAY;;;;;;kCACnC,8OAAC;;;;;kCACD,8OAAC;wBAAO,MAAK;kCAAS;;;;;;;;;;;;0BAExB,8OAAC;0BAAE;;;;;;0BACD,8OAAC;gBAAO,SAAS,IAAI,OAAO,IAAI,CAAC;gBAAgB,MAAK;0BAAS;;;;;;;;;;;;AAGvE"}}]
+}

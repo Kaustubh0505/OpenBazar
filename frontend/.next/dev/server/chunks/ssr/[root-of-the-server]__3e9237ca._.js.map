@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///Users/kaustubhhiwanj/OpenBazar/frontend/app/page.js"],"sourcesContent":["\nimport { redirect } from \"next/navigation\";\n\n\nexport default function Home() {\n  return (\n    redirect('/auth/signup')\n  );\n}\n"],"names":[],"mappings":";;;;AACA;AAAA;;AAGe,SAAS;IACtB,OACE,IAAA,iMAAQ,EAAC;AAEb"}}]
+}
