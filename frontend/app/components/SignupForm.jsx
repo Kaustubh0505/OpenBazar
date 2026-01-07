@@ -136,7 +136,7 @@ export default function SignupForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-4 bg-indigo-500 hover:bg-indigo-600
+              className="w-full mt-4 bg-gray-800 hover:bg-gray-600
               active:scale-95 transition py-2.5 rounded-full text-white
               disabled:opacity-50 cursor-pointer"
             >
@@ -157,7 +157,7 @@ export default function SignupForm() {
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full border my-4 border-gray-400/40 outline-none
+              className="w-full border my-4 border-gray-800 outline-none
               rounded-full py-2.5 px-4"
             />
 
@@ -179,7 +179,7 @@ export default function SignupForm() {
           <button
             type="button"
             onClick={() => router.push("/auth/login")}
-            className="text-blue-500 cursor-pointer underline"
+            className="text-gray-500 cursor-pointer underline"
           >
             Login Now
           </button>

@@ -116,7 +116,7 @@ export default function LoginForm() {
             }}
             className={`w-1/2 py-2 text-sm cursor-pointer transition ${
               mode === "password"
-                ? "bg-indigo-500 text-white"
+                ? "bg-gray-800 text-white"
                 : "bg-gray-100"
             }`}
           >
@@ -130,7 +130,7 @@ export default function LoginForm() {
             }}
             className={`w-1/2 py-2 text-sm cursor-pointer transition ${
               mode === "otp"
-                ? "bg-indigo-500 text-white"
+                ? "bg-gray-800 text-white"
                 : "bg-gray-100"
             }`}
           >
@@ -162,7 +162,7 @@ export default function LoginForm() {
             <div className="text-right py-4">
               <button
                 type="button"
-                className="text-blue-600 text-sm underline"
+                className="text-gray-600 text-sm underline"
               >
                 Forgot Password?
               </button>
@@ -171,7 +171,7 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full cursor-pointer mb-3 bg-indigo-500 hover:bg-indigo-600 active:scale-95 transition py-2.5 rounded-full text-white disabled:opacity-50"
+              className="w-full cursor-pointer mb-3 bg-gray-800 hover:bg-gray-600 active:scale-95 transition py-2.5 rounded-full text-white disabled:opacity-50"
             >
               {loading ? "Logging in..." : "Log in"}
             </button>
@@ -193,7 +193,7 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full cursor-pointer mb-3 bg-indigo-500 hover:bg-indigo-600 active:scale-95 transition py-2.5 rounded-full text-white disabled:opacity-50"
+              className="w-full cursor-pointer mb-3 bg-gray-800 hover:bg-gray-600 active:scale-95 transition py-2.5 rounded-full text-white disabled:opacity-50"
             >
               {loading ? "Sending OTP..." : "Send OTP"}
             </button>
@@ -227,7 +227,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => router.push("/auth/signup")}
-            className="text-blue-500 cursor-pointer underline"
+            className="text-gray-500 cursor-pointer underline"
           >
             Signup Now
           </button>

@@ -10,7 +10,6 @@ import bcrypt from "bcryptjs";
 //signup otp
 export const sendOtp = async (req, res) => {
     const { name, email, phone, password } = req.body;
-    console.log("send otp has called for no reason")
 
     try {
         if (!name || !email || !phone || !password) {
@@ -31,7 +30,6 @@ export const sendOtp = async (req, res) => {
 
         const otp = generateOtp();
         const otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
-        console.log("1")
 
         if (!user) {
             user = new User({
@@ -50,9 +48,7 @@ export const sendOtp = async (req, res) => {
             user.otpExpiry = otpExpiry;
         }
         await user.save();
-        console.log("2")
 
-        console.log("Signup OTP:", otp);
 
 
         await sendEmail({
@@ -60,7 +56,6 @@ export const sendOtp = async (req, res) => {
             subject: "OTP verification for OpenBazaar",
             text: `Message from OpenBazaar.Your OTP for email verification is ${otp} is valid for 5 minutes`,
           });
-          console.log("3")
         
 
         
@@ -142,7 +137,6 @@ export const login = async (req, res) => {
         // }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log(isMatch)
         if (!isMatch) {
           return res.status(401).json({ message: "Invalid credentials" });
         }
@@ -195,7 +189,6 @@ export const sendLoginOtp = async (req, res) => {
         user.otpExpiry = otpExpiry;
         await user.save();
 
-        console.log("Login OTP:", otp);
 
         await sendEmail({
             to: `${email}`,

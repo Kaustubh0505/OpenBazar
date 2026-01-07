@@ -39,7 +39,7 @@ export default function VerifyOtpForm() {
 
       <button
         onClick={handleVerify}
-        className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+        className="bg-gray-800 text-white px-4 py-2 rounded w-full"
       >
         Verify
       </button>
