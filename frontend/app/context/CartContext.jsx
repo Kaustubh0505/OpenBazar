@@ -1,53 +1,192 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext(undefined);
 
+const API_BASE_URL = "http://localhost:5001/api";
+
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const addToCart = (product) => {
+  // Helper function to get auth headers
+  const getAuthHeaders = () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    return {
+      "Content-Type": "application/json",
+      Authorization: token ? `Bearer ${token}` : "",
+    };
+  };
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    setIsAuthenticated(!!token);
+
+    // Load cart from backend when authenticated
+    if (token) {
+      fetchCartFromDB();
+    }
+  }, []);
+
+  // Fetch cart from database
+  const fetchCartFromDB = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/cart`, {
+        headers: getAuthHeaders(),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Transform cart items from DB format to local format
+        const cartItems = data.cart.items.map((item) => ({
+          _id: item.product._id || item.product,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: item.quantity,
+        }));
+        setCart(cartItems);
+      }
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  };
+
+  // Sync local cart with database (called after login)
+  const syncCartWithDB = async (localCart) => {
+    if (localCart.length === 0) return;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/cart/sync`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ items: localCart }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const cartItems = data.cart.items.map((item) => ({
+          _id: item.product._id || item.product,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: item.quantity,
+        }));
+        setCart(cartItems);
+      }
+    } catch (error) {
+      console.error("Error syncing cart:", error);
+    }
+  };
+
+  const addToCart = async (product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (item) => item._id === product._id
       );
 
+      let newCart;
       if (existingItem) {
-        return prevCart.map((item) =>
+        newCart = prevCart.map((item) =>
           item._id === product._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
+      } else {
+        newCart = [...prevCart, { ...product, quantity: 1 }];
       }
 
-      return [...prevCart, { ...product, quantity: 1 }];
+      // Sync with database if authenticated
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      if (token) {
+        console.log("Token found, syncing with database...");
+        console.log("Product ID:", product._id);
+
+        fetch(`${API_BASE_URL}/cart/add`, {
+          method: "POST",
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ productId: product._id, quantity: 1 }),
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              const errorData = await response.json();
+              console.error("❌ Failed to add to cart:", errorData);
+              throw new Error(errorData.message || "Failed to add to cart");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("✅ Item added to database:", data);
+          })
+          .catch((error) => {
+            console.error("❌ Error adding to cart:", error);
+          });
+      } else {
+        console.log("⚠️ No token found - item only saved locally (not logged in)");
+      }
+
+      return newCart;
     });
   };
 
-  const removeFromCart = (productId) => {
-    setCart((prevCart) =>
-      prevCart.filter((item) => item._id !== productId)
-    );
+  const removeFromCart = async (productId) => {
+    setCart((prevCart) => {
+      const newCart = prevCart.filter((item) => item._id !== productId);
+
+      // Sync with database if authenticated
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      if (token) {
+        fetch(`${API_BASE_URL}/cart/remove/${productId}`, {
+          method: "DELETE",
+          headers: getAuthHeaders(),
+        }).catch((error) => console.error("Error removing from cart:", error));
+      }
+
+      return newCart;
+    });
   };
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = async (productId, quantity) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
     }
 
-    setCart((prevCart) =>
-      prevCart.map((item) =>
+    setCart((prevCart) => {
+      const newCart = prevCart.map((item) =>
         item._id === productId
           ? { ...item, quantity }
           : item
-      )
-    );
+      );
+
+      // Sync with database if authenticated
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      if (token) {
+        fetch(`${API_BASE_URL}/cart/update`, {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ productId, quantity }),
+        }).catch((error) => console.error("Error updating cart:", error));
+      }
+
+      return newCart;
+    });
   };
 
-  const clearCart = () => {
+  const clearCart = async () => {
     setCart([]);
+
+    // Sync with database if authenticated
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (token) {
+      fetch(`${API_BASE_URL}/cart/clear`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+      }).catch((error) => console.error("Error clearing cart:", error));
+    }
   };
 
   const getTotalItems = () => {
@@ -74,6 +213,9 @@ export function CartProvider({ children }) {
         clearCart,
         getTotalItems,
         getTotalPrice,
+        syncCartWithDB,
+        fetchCartFromDB,
+        loading,
       }}
     >
       {children}

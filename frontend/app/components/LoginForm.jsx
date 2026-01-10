@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useCart } from "../context/CartContext";
 
 export default function LoginForm() {
   const router = useRouter();
+  const { cart, syncCartWithDB, fetchCartFromDB } = useCart();
 
   const [mode, setMode] = useState("password"); // password | otp
   const [step, setStep] = useState("login"); // login | otp
@@ -43,6 +45,14 @@ export default function LoginForm() {
         }
       );
       localStorage.setItem("token", res.data.token);
+
+      // Sync cart with database after login
+      if (cart.length > 0) {
+        await syncCartWithDB(cart);
+      } else {
+        await fetchCartFromDB();
+      }
+
       router.push("/homePage");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
@@ -84,6 +94,14 @@ export default function LoginForm() {
         { email: formData.email, otp }
       );
       localStorage.setItem("token", res.data.token);
+
+      // Sync cart with database after login
+      if (cart.length > 0) {
+        await syncCartWithDB(cart);
+      } else {
+        await fetchCartFromDB();
+      }
+
       router.push("/homePage");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP");
@@ -114,11 +132,10 @@ export default function LoginForm() {
               setMode("password");
               setStep("login");
             }}
-            className={`w-1/2 py-2 text-sm cursor-pointer transition ${
-              mode === "password"
+            className={`w-1/2 py-2 text-sm cursor-pointer transition ${mode === "password"
                 ? "bg-gray-800 text-white"
                 : "bg-gray-100"
-            }`}
+              }`}
           >
             Password
           </button>
@@ -128,11 +145,10 @@ export default function LoginForm() {
               setMode("otp");
               setStep("login");
             }}
-            className={`w-1/2 py-2 text-sm cursor-pointer transition ${
-              mode === "otp"
+            className={`w-1/2 py-2 text-sm cursor-pointer transition ${mode === "otp"
                 ? "bg-gray-800 text-white"
                 : "bg-gray-100"
-            }`}
+              }`}
           >
             Email OTP
           </button>

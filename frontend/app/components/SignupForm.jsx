@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useCart } from "../context/CartContext";
 
 export default function SignupForm() {
   const router = useRouter();
+  const { cart, syncCartWithDB, fetchCartFromDB } = useCart();
 
   const [step, setStep] = useState("signup"); // signup | otp
   const [loading, setLoading] = useState(false);
@@ -71,6 +73,14 @@ export default function SignupForm() {
       );
 
       localStorage.setItem("token", res.data.token);
+
+      // Sync cart with database after signup
+      if (cart.length > 0) {
+        await syncCartWithDB(cart);
+      } else {
+        await fetchCartFromDB();
+      }
+
       router.push("/homePage");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP");

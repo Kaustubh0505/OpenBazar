@@ -36,14 +36,16 @@ export default function ProductDetailPage() {
         setIsLoading(false);
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (!product) return;
+    
         setIsAdding(true);
-        for (let i = 0; i < quantity; i++) {
-            addToCart(product);
-        }
-        setTimeout(() => setIsAdding(false), 500);
+    
+        await addToCart(product, quantity);
+    
+        setIsAdding(false);
     };
+    
 
     if (isLoading) {
         return (

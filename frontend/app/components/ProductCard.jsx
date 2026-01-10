@@ -2,7 +2,7 @@
 
 import { Star, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export function ProductCard({ product }) {
@@ -10,11 +10,25 @@ export function ProductCard({ product }) {
   const { addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
 
-  const handleAddToCart = (e) => {
-    e.stopPropagation(); // Prevent navigation when clicking add to cart
-    setIsAdding(true);
-    addToCart(product);
-    setTimeout(() => setIsAdding(false), 500);
+
+  const addingRef = useRef(false);
+
+  const handleAddToCart = async (e) => {
+    e.preventDefault();     // ✅ stop default behavior
+    e.stopPropagation();    // ✅ stop bubbling
+  
+    if (addingRef.current) return; // 🔒 HARD BLOCK
+    addingRef.current = true;
+  
+    try {
+      setIsAdding(true);
+      await addToCart(product); // ✅ ONE CALL ONLY
+    } finally {
+      setIsAdding(false);
+      setTimeout(() => {
+        addingRef.current = false;
+      }, 300);
+    }
   };
 
   const handleCardClick = () => {

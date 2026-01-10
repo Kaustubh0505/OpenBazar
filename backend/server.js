@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import cors from "cors"
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -22,6 +23,7 @@ connectDB();
 
 app.use("/api/auth", authRoutes);
 app.use("/api", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 
 app.get("/", (req, res) => {
