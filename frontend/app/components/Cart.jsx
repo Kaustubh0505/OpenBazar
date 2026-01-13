@@ -2,6 +2,7 @@
 
 import { X, Plus, Minus, Trash2 } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useEffect } from "react";
 
 export function Cart({ isOpen, onClose }) {
   const {
@@ -13,6 +14,10 @@ export function Cart({ isOpen, onClose }) {
   } = useCart();
 
   if (!isOpen) return null;
+
+  useEffect(()=>{
+    
+  })
 
   return (
     <>
@@ -54,7 +59,7 @@ export function Cart({ isOpen, onClose }) {
                   className="flex gap-4 bg-gray-50 p-3 rounded-lg"
                 >
                   <img
-                    src={item.image_url}
+                    src={item.image}
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
@@ -131,3 +136,5 @@ export function Cart({ isOpen, onClose }) {
     </>
   );
 }
+
+

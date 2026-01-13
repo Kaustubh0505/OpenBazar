@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
@@ -14,15 +15,25 @@ export default function CartPage() {
         removeFromCart,
         getTotalPrice,
         clearCart,
+        fetchCartFromDB,
     } = useCart();
+
+    // Fetch cart from database when component mounts
+    useEffect(() => {
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+        if (token) {
+            fetchCartFromDB();
+
+        }
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col">
             <Navbar
                 categories={[]}
                 onCategorySelect={() => router.push("/homePage")}
-                onSearch={() => {}}
-                onCartClick={() => {}}
+                onSearch={() => { }}
+                onCartClick={() => { }}
             />
 
             <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
@@ -56,7 +67,7 @@ export default function CartPage() {
                         </p>
                         <button
                             onClick={() => router.push("/homePage")}
-                            className="bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600"
+                            className="bg-gray-800 text-white px-6 py-3 cursor-pointer  rounded-lg font-semibold hover:bg-gray-600"
                         >
                             Start Shopping
                         </button>
@@ -75,7 +86,7 @@ export default function CartPage() {
                                         <div
                                             className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden cursor-pointer"
                                             onClick={() =>
-                                                router.push(`/product/${item.product}`)
+                                                router.push(`/product/${item._id}`)
                                             }
                                         >
                                             <img
@@ -88,15 +99,15 @@ export default function CartPage() {
                                         {/* Info */}
                                         <div className="flex-1">
                                             <h3
-                                                className="text-lg font-semibold cursor-pointer"
+                                                className="text-lg text-gray-900 font-semibold cursor-pointer"
                                                 onClick={() =>
-                                                    router.push(`/product/${item.product}`)
+                                                    router.push(`/product/${item._id}`)
                                                 }
                                             >
                                                 {item.name}
                                             </h3>
 
-                                            <div className="flex justify-between items-center mt-4">
+                                            <div className="flex text-gray-900 justify-between items-center mt-4">
                                                 {/* Price */}
                                                 <div>
                                                     <p className="text-xl font-bold">
@@ -112,7 +123,7 @@ export default function CartPage() {
                                                     <button
                                                         onClick={() =>
                                                             updateQuantity(
-                                                                item.product,
+                                                                item._id,
                                                                 item.quantity - 1
                                                             )
                                                         }
@@ -128,7 +139,7 @@ export default function CartPage() {
                                                     <button
                                                         onClick={() =>
                                                             updateQuantity(
-                                                                item.product,
+                                                                item._id,
                                                                 item.quantity + 1
                                                             )
                                                         }
@@ -140,7 +151,7 @@ export default function CartPage() {
                                                     {/* Remove */}
                                                     <button
                                                         onClick={() =>
-                                                            removeFromCart(item.product)
+                                                            removeFromCart(item._id)
                                                         }
                                                         className="p-2 text-red-600"
                                                     >
@@ -156,7 +167,7 @@ export default function CartPage() {
 
                         {/* Summary */}
                         <div className="lg:col-span-1">
-                            <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
+                            <div className="bg-white text-gray-900 rounded-lg shadow-md p-6 sticky top-24">
                                 <h2 className="text-xl font-bold mb-4">
                                     Order Summary
                                 </h2>
@@ -176,13 +187,13 @@ export default function CartPage() {
                                     </div>
                                 </div>
 
-                                <button className="w-full bg-gray-800 text-white py-3 rounded-lg mt-6">
+                                <button className="w-full cursor-pointer bg-gray-800 text-white py-3 rounded-lg mt-6">
                                     Proceed to Checkout
                                 </button>
 
                                 <button
                                     onClick={clearCart}
-                                    className="w-full border mt-3 py-2 rounded-lg"
+                                    className="w-full cursor-pointer border mt-3 py-2 rounded-lg"
                                 >
                                     Clear Cart
                                 </button>

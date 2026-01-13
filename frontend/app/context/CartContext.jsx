@@ -33,6 +33,7 @@ export function CartProvider({ children }) {
 
   // Fetch cart from database
   const fetchCartFromDB = async () => {
+
     try {
       const response = await fetch(`${API_BASE_URL}/cart`, {
         headers: getAuthHeaders(),
@@ -45,7 +46,7 @@ export function CartProvider({ children }) {
           _id: item.product._id || item.product,
           name: item.name,
           price: item.price,
-          image: item.image,
+          image: item.product.image_url,
           quantity: item.quantity,
         }));
         setCart(cartItems);

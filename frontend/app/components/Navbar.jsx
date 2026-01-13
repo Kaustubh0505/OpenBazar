@@ -77,7 +77,7 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
 
             <button
               onClick={() => router.push('/cart')}
-              className="relative p-2 text-white hover:underline transition-colors"
+              className="relative p-2 text-white cursor-pointer  hover:underline transition-colors"
             >
               <ShoppingCart className="h-6 w-6" />
               {getTotalItems() > 0 && (
