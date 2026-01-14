@@ -5,6 +5,7 @@ import cors from "cors"
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
+import thriftItemRoutes from "./routes/thriftItemRoutes.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -24,6 +25,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/thrift", thriftItemRoutes);
+
 
 
 app.get("/", (req, res) => {
