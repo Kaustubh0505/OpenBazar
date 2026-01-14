@@ -34,7 +34,7 @@ function App() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:5001/api/categories");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/categories`);
       const data = await response.json();
       setCategories(data || []);
     } catch (error) {
@@ -47,7 +47,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5001/api/products");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/products`);
       const data = await response.json();
       setAllProducts(data || []);
     } catch (error) {

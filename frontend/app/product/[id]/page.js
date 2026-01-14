@@ -26,7 +26,7 @@ export default function ProductDetailPage() {
         setIsLoading(true);
         try {
             const response = await fetch(
-                `http://localhost:5001/api/products/${params.id}`
+                `${process.env.NEXT_PUBLIC_BACKENDURL}/api/products/${params.id}`
             );
             const data = await response.json();
             setProduct(data);

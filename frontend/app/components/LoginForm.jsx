@@ -38,7 +38,7 @@ export default function LoginForm() {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:5001/api/auth/login",
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/login`,
         {
           identifier: formData.identifier,
           password: formData.password,
@@ -71,7 +71,7 @@ export default function LoginForm() {
     try {
       setLoading(true);
       await axios.post(
-        "http://localhost:5001/api/auth/login/send-otp",
+        `${process.env.NEXT_PUBLIC_BACKENDURL}}/api/auth/login/send-otp`,
         { email: formData.email }
       );
       setStep("otp");
@@ -90,7 +90,7 @@ export default function LoginForm() {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:5001/api/auth/login/verify-otp",
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/login/verify-otp`,
         { email: formData.email, otp }
       );
       localStorage.setItem("token", res.data.token);

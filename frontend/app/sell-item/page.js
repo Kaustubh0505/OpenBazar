@@ -42,7 +42,7 @@ export default function SellItemPage() {
     
         try {
             const response = await fetch(
-                "https://api.cloudinary.com/v1_1/dvdpkyajq/image/upload",
+                `${process.env.NEXT_PUBLIC_CLOUDINARYAPI}`,
                 {
                     method: "POST",
                     body: formData,
@@ -50,7 +50,6 @@ export default function SellItemPage() {
             );
     
             const data = await response.json();
-            console.log("Cloudinary response:", data);
     
             if (!response.ok) {
                 throw new Error(data.error?.message || "Cloudinary upload failed");
@@ -101,7 +100,7 @@ export default function SellItemPage() {
             }
 
             // Submit to backend
-            const response = await fetch("http://localhost:5001/api/thrift", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/thrift`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

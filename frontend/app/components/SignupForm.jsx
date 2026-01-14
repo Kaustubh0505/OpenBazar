@@ -43,7 +43,7 @@ export default function SignupForm() {
       setLoading(true);
 
       await axios.post(
-        "http://localhost:5001/api/auth/send-otp",
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/send-otp`,
         formData
       );
 
@@ -65,7 +65,7 @@ export default function SignupForm() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5001/api/auth/verify-otp",
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/verify-otp`,
         {
           email: formData.email,
           otp,
@@ -175,7 +175,7 @@ export default function SignupForm() {
               type="button"
               onClick={handleVerifyOtp}
               disabled={loading}
-              className="w-full bg-green-500 hover:bg-green-600
+              className="w-full bg-gray-900 hover:bg-gray-600
               active:scale-95 cursor-pointer transition py-2.5 rounded-full text-white
               disabled:opacity-50"
             >

@@ -14,7 +14,7 @@ export default function VerifyOtpForm() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/auth/verify-otp",
+        `${process.env.NEXT_PUBLIC_BACKENDURL}api/auth/verify-otp`,
         { phone, otp }
       );
 

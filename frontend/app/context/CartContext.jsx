@@ -4,7 +4,6 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext(undefined);
 
-const API_BASE_URL = "http://localhost:5001/api";
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
@@ -14,8 +13,7 @@ export function CartProvider({ children }) {
   // Helper function to get auth headers
   const getAuthHeaders = () => {
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    return {
-      "Content-Type": "application/json",
+    return {"Content-Type": "application/json",
       Authorization: token ? `Bearer ${token}` : "",
     };
   };
@@ -35,7 +33,7 @@ export function CartProvider({ children }) {
   const fetchCartFromDB = async () => {
 
     try {
-      const response = await fetch(`${API_BASE_URL}/cart`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/cart`, {
         headers: getAuthHeaders(),
       });
 
@@ -61,7 +59,7 @@ export function CartProvider({ children }) {
     if (localCart.length === 0) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/cart/sync`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/cart/sync`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({ items: localCart }),
@@ -104,9 +102,8 @@ export function CartProvider({ children }) {
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (token) {
         console.log("Token found, syncing with database...");
-        console.log("Product ID:", product._id);
 
-        fetch(`${API_BASE_URL}/cart/add`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/cart/add`, {
           method: "POST",
           headers: getAuthHeaders(),
           body: JSON.stringify({ productId: product._id, quantity: 1 }),
@@ -140,7 +137,7 @@ export function CartProvider({ children }) {
       // Sync with database if authenticated
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (token) {
-        fetch(`${API_BASE_URL}/cart/remove/${productId}`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/cart/remove/${productId}`, {
           method: "DELETE",
           headers: getAuthHeaders(),
         }).catch((error) => console.error("Error removing from cart:", error));
@@ -166,7 +163,7 @@ export function CartProvider({ children }) {
       // Sync with database if authenticated
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (token) {
-        fetch(`${API_BASE_URL}/cart/update`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/cart/update`, {
           method: "PUT",
           headers: getAuthHeaders(),
           body: JSON.stringify({ productId, quantity }),
@@ -183,7 +180,7 @@ export function CartProvider({ children }) {
     // Sync with database if authenticated
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (token) {
-      fetch(`${API_BASE_URL}/cart/clear`, {
+      fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/cart/clear`, {
         method: "DELETE",
         headers: getAuthHeaders(),
       }).catch((error) => console.error("Error clearing cart:", error));

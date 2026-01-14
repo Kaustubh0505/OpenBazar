@@ -17,7 +17,7 @@ export default function ThriftStorePage() {
 
     const fetchThriftItems = async () => {
         try {
-            const response = await fetch("http://localhost:5001/api/thrift");
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/thrift`);
             const data = await response.json();
 
             if (data.success) {
@@ -53,7 +53,7 @@ export default function ThriftStorePage() {
         setBuyingItemId(itemId);
 
         try {
-            const response = await fetch(`http://localhost:5001/api/thrift/${itemId}/buy`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/thrift/${itemId}/buy`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
