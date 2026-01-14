@@ -13,7 +13,8 @@ export function CartProvider({ children }) {
   // Helper function to get auth headers
   const getAuthHeaders = () => {
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    return {"Content-Type": "application/json",
+    return {
+      "Content-Type": "application/json",
       Authorization: token ? `Bearer ${token}` : "",
     };
   };
@@ -31,7 +32,7 @@ export function CartProvider({ children }) {
 
   // Fetch cart from database
   const fetchCartFromDB = async () => {
-
+    setLoading(true);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/cart`, {
         headers: getAuthHeaders(),
@@ -51,6 +52,8 @@ export function CartProvider({ children }) {
       }
     } catch (error) {
       console.error("Error fetching cart:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

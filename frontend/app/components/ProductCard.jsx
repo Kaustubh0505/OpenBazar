@@ -2,7 +2,7 @@
 
 import { Star, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export function ProductCard({ product }) {
@@ -16,18 +16,23 @@ export function ProductCard({ product }) {
   const handleAddToCart = async (e) => {
     e.preventDefault();     // ✅ stop default behavior
     e.stopPropagation();    // ✅ stop bubbling
-  
+
     if (addingRef.current) return; // 🔒 HARD BLOCK
     addingRef.current = true;
-  
+
     try {
       setIsAdding(true);
       await addToCart(product); // ✅ ONE CALL ONLY
-    } finally {
-      setIsAdding(false);
+
+      // Keep "Added!" message visible for 1.5 seconds
       setTimeout(() => {
+        setIsAdding(false);
         addingRef.current = false;
-      }, 300);
+      }, 1500);
+    } catch (error) {
+      // Reset immediately on error
+      setIsAdding(false);
+      addingRef.current = false;
     }
   };
 

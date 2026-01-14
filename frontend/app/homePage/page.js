@@ -125,7 +125,7 @@ function App() {
           <div className="flex-1">
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+                <Loader2 className="h-12 w-12 animate-spin text-gray-800" />
               </div>
             ) : currentProducts.length === 0 ? (
               <div className="bg-white rounded-lg shadow-md p-12 text-center">

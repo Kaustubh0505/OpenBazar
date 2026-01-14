@@ -38,21 +38,28 @@ export default function ProductDetailPage() {
 
     const handleAddToCart = async () => {
         if (!product) return;
-    
-        setIsAdding(true);
-    
-        await addToCart(product, quantity);
-    
-        setIsAdding(false);
+
+        try {
+            setIsAdding(true);
+            await addToCart(product, quantity);
+
+            // Keep "Added to Cart!" message visible for 1.5 seconds
+            setTimeout(() => {
+                setIsAdding(false);
+            }, 1500);
+        } catch (error) {
+            // Reset immediately on error
+            setIsAdding(false);
+        }
     };
-    
+
 
     if (isLoading) {
         return (
             <div className="min-h-screen bg-gray-50 flex flex-col">
                 <Navbar categories={[]} onCategorySelect={() => { }} onSearch={() => { }} onCartClick={() => { }} />
                 <div className="flex-1 flex items-center justify-center">
-                    <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+                    <Loader2 className="h-12 w-12 animate-spin text-gray-800" />
                 </div>
             </div>
         );

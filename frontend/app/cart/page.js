@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Plus, Minus, Trash2, ShoppingCart, Loader2 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
@@ -16,6 +16,7 @@ export default function CartPage() {
         getTotalPrice,
         clearCart,
         fetchCartFromDB,
+        loading,
     } = useCart();
 
     // Fetch cart from database when component mounts
@@ -51,12 +52,21 @@ export default function CartPage() {
                     <h1 className="text-3xl font-bold text-gray-900 mb-2">
                         Shopping Cart
                     </h1>
-                    <p className="text-gray-600">
-                        {cart.length} {cart.length === 1 ? "item" : "items"} in your cart
-                    </p>
+                    {!loading && (
+                        <p className="text-gray-600">
+                            {cart.length} {cart.length === 1 ? "item" : "items"} in your cart
+                        </p>
+                    )}
                 </div>
 
-                {cart.length === 0 ? (
+                {loading ? (
+                    <div className="flex items-center justify-center h-64">
+                        <div className="text-center">
+                            <Loader2 className="h-12 w-12 animate-spin text-gray-800 mx-auto mb-4" />
+                            <p className="text-gray-600">Loading your cart...</p>
+                        </div>
+                    </div>
+                ) : cart.length === 0 ? (
                     <div className="bg-white rounded-lg shadow-md p-12 text-center">
                         <ShoppingCart className="h-24 w-24 text-gray-300 mx-auto mb-4" />
                         <h2 className="text-2xl font-semibold text-gray-900 mb-2">
