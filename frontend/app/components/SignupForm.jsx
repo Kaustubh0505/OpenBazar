@@ -18,6 +18,7 @@ export default function SignupForm() {
     email: "",
     password: "",
     phone: "",
+    role: "buyer",
   });
 
   const [otp, setOtp] = useState("");
@@ -142,6 +143,21 @@ export default function SignupForm() {
               onChange={handleChange}
               className="w-full border my-3 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
             />
+
+            <div className="flex items-center gap-2 my-2 px-2">
+              <input
+                type="checkbox"
+                id="seller-checkbox"
+                checked={formData.role === "seller"}
+                onChange={(e) =>
+                  setFormData({ ...formData, role: e.target.checked ? "seller" : "buyer" })
+                }
+                className="w-4 h-4 cursor-pointer"
+              />
+              <label htmlFor="seller-checkbox" className="text-sm text-gray-700 cursor-pointer">
+                I want to become a Seller
+              </label>
+            </div>
 
             <button
               type="submit"

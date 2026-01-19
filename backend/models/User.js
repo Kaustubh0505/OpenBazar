@@ -26,13 +26,13 @@ const userSchema = new mongoose.Schema(
       match: [/^[6-9]\d{9}$/, "Please enter a valid Indian phone number"],
     },
     password: {
-        type: String,
-        required: true,
-        select: false,
-      },
+      type: String,
+      required: true,
+      select: false,
+    },
     isEmailVerified: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
 
     otp: {
@@ -47,6 +47,27 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    role: {
+      type: String,
+      enum: ["buyer", "seller", "admin"],
+      default: "buyer",
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
+    addresses: [
+      {
+        fullName: { type: String, required: true },
+        phone: { type: String, required: true },
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String, required: true },
+        pincode: { type: String, required: true },
+        country: { type: String, required: true },
+        isDefault: { type: Boolean, default: false },
+      },
+    ],
   },
   {
     timestamps: true,

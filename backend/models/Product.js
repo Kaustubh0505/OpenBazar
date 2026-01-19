@@ -37,6 +37,16 @@ const productSchema = new mongoose.Schema(
             max: 5,
             default: 4,
         },
+        seller_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        status: {
+            type: String,
+            enum: ["pending", "approved", "rejected"],
+            default: "pending",
+        },
     },
     {
         timestamps: true,

@@ -23,7 +23,10 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
           {/* Logo */}
           <div
             className="flex items-center gap-3 cursor-pointer"
-            onClick={() => onCategorySelect(null)}
+            onClick={() => {
+              onCategorySelect(null);
+              router.push("/homePage");
+            }}
           >
             <Store className="h-8 w-8 text-white" />
             <span className="text-xl font-bold text-white hidden sm:block">
@@ -70,10 +73,45 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
 
           {/* Right Actions */}
           <div className="flex items-center gap-4">
-            <button className="hidden md:flex cursor-pointer hover:underline items-center gap-2 px-4 py-2 text-white transition-colors">
-              <User className="h-5 w-5" />
-              <span className="text-sm font-medium">Account</span>
-            </button>
+            {/* Account Dropdown */}
+            <div className="hidden md:flex relative group">
+              <button className="flex items-center gap-2 px-4 py-2 text-white hover:text-gray-300 transition-colors">
+                <User className="h-5 w-5" />
+                <span className="text-sm font-medium">Account</span>
+              </button>
+
+              {/* Dropdown Menu */}
+              <div className="absolute right-0 top-full w-48 bg-white rounded-md shadow-lg py-1 text-gray-800 hidden group-hover:block border border-gray-200">
+                {!localStorage.getItem("token") ? (
+                  <>
+                    <button onClick={() => router.push("/auth/login")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left">Login</button>
+                    <button onClick={() => router.push("/auth/signup")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left">Sign Up</button>
+                    <button onClick={() => router.push("/auth/signup")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left font-semibold text-blue-600">Sell on OpenBazar</button>
+                  </>
+                ) : (
+                  <>
+                    <div className="px-4 py-2 text-xs text-gray-500 border-b mb-1">
+                      Hello, User
+                    </div>
+                    <button onClick={() => router.push("/account/profile")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left">My Profile</button>
+
+                    {localStorage.getItem("role") === "seller" && (
+                      <button onClick={() => router.push("/seller/dashboard")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left text-blue-600">Seller Dashboard</button>
+                    )}
+
+                    {localStorage.getItem("role") === "admin" && (
+                      <button onClick={() => router.push("/admin/dashboard")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left text-red-600">Admin Panel</button>
+                    )}
+
+                    <button onClick={() => {
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("role");
+                      router.push("/auth/login");
+                    }} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left text-gray-500 border-t mt-1">Logout</button>
+                  </>
+                )}
+              </div>
+            </div>
 
             <button
               onClick={() => router.push('/cart')}
@@ -91,7 +129,7 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 text-gray-700"
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6 text-white" />
             </button>
           </div>
         </div>
@@ -112,10 +150,26 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
               </div>
             </form>
 
-            <button className="flex items-center gap-2 w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <button
+              onClick={() => router.push("/account/profile")}
+              className="flex items-center gap-2 w-full px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+            >
               <User className="h-5 w-5" />
               <span>My Account</span>
             </button>
+
+            {localStorage.getItem("token") && (
+              <button
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("role");
+                  router.push("/auth/login");
+                }}
+                className="flex items-center gap-2 w-full px-4 py-2 text-red-400 hover:bg-gray-800 rounded-lg"
+              >
+                <span>Logout</span>
+              </button>
+            )}
           </div>
         )}
       </div>

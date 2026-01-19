@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 
 //signup otp
 export const sendOtp = async (req, res) => {
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, role } = req.body;
 
     try {
         if (!name || !email || !phone || !password) {
@@ -26,7 +26,7 @@ export const sendOtp = async (req, res) => {
             });
         }
 
-        const hashedPass = await bcrypt.hash(password,10)
+        const hashedPass = await bcrypt.hash(password, 10)
 
         const otp = generateOtp();
         const otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min
@@ -36,9 +36,10 @@ export const sendOtp = async (req, res) => {
                 name,
                 email,
                 phone,
-                password:hashedPass,
+                password: hashedPass,
                 otp,
                 otpExpiry,
+                role: role || "buyer",
             });
         } else {
             user.name = name;
@@ -46,6 +47,7 @@ export const sendOtp = async (req, res) => {
             user.password = password;
             user.otp = otp;
             user.otpExpiry = otpExpiry;
+            if (role) user.role = role;
         }
         await user.save();
 
@@ -55,10 +57,10 @@ export const sendOtp = async (req, res) => {
             to: `${email}`,
             subject: "OTP verification for OpenBazaar",
             text: `Message from OpenBazaar.Your OTP for email verification is ${otp} is valid for 5 minutes`,
-          });
-        
+        });
 
-        
+
+
         return res.status(200).json({
             success: true,
             message: "OTP sent for signup",
@@ -90,7 +92,7 @@ export const verifyOtp = async (req, res) => {
         await user.save();
 
         const token = jwt.sign(
-            { id: user._id },
+            { id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
@@ -103,6 +105,7 @@ export const verifyOtp = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 phone: user.phone,
+                role: user.role,
             },
         });
     } catch (error) {
@@ -130,6 +133,10 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
+        if (user.isBlocked) {
+            return res.status(403).json({ message: "Your account has been blocked. Please contact support." });
+        }
+
         // if (!user.isEmailVerified) {
         //   return res.status(403).json({
         //     message: "Phone number not verified",
@@ -138,11 +145,11 @@ export const login = async (req, res) => {
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-          return res.status(401).json({ message: "Invalid credentials" });
+            return res.status(401).json({ message: "Invalid credentials" });
         }
 
         const token = jwt.sign(
-            { id: user._id },
+            { id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
@@ -155,6 +162,7 @@ export const login = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 phone: user.phone,
+                role: user.role,
             },
         });
     } catch (error) {
@@ -194,8 +202,8 @@ export const sendLoginOtp = async (req, res) => {
             to: `${email}`,
             subject: "OTP verification for OpenBazaar",
             text: `Message from OpenBazaar.Your OTP for email verification is ${otp} is valid for 5 minutes`,
-          });
-        
+        });
+
 
         return res.status(200).json({
             success: true,
@@ -228,7 +236,7 @@ export const verifyLoginOtp = async (req, res) => {
         await user.save();
 
         const token = jwt.sign(
-            { id: user._id },
+            { id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
@@ -241,6 +249,7 @@ export const verifyLoginOtp = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 phone: user.phone,
+                role: user.role,
             },
         });
     } catch (error) {

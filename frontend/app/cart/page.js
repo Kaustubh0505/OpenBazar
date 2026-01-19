@@ -197,7 +197,17 @@ export default function CartPage() {
                                     </div>
                                 </div>
 
-                                <button className="w-full cursor-pointer bg-gray-800 text-white py-3 rounded-lg mt-6">
+                                <button
+                                    onClick={() => {
+                                        const token = localStorage.getItem("token");
+                                        if (token) {
+                                            router.push("/checkout/address");
+                                        } else {
+                                            router.push("/auth/login?redirect=/checkout/address");
+                                        }
+                                    }}
+                                    className="w-full cursor-pointer bg-gray-800 text-white py-3 rounded-lg mt-6 hover:bg-gray-700 transition"
+                                >
                                     Proceed to Checkout
                                 </button>
 

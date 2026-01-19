@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect");
+
   const { cart, syncCartWithDB, fetchCartFromDB } = useCart();
 
   const [mode, setMode] = useState("password"); // password | otp
@@ -45,6 +48,7 @@ export default function LoginForm() {
         }
       );
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.user.role);
 
       // Sync cart with database after login
       if (cart.length > 0) {
@@ -53,7 +57,13 @@ export default function LoginForm() {
         await fetchCartFromDB();
       }
 
-      router.push("/homePage");
+      if (res.data.user.role === "admin") {
+        router.push("/admin/dashboard");
+      } else if (res.data.user.role === "seller") {
+        router.push("/seller/dashboard");
+      } else {
+        router.push("/homePage");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
@@ -94,6 +104,7 @@ export default function LoginForm() {
         { email: formData.email, otp }
       );
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.user.role);
 
       // Sync cart with database after login
       if (cart.length > 0) {
@@ -102,7 +113,13 @@ export default function LoginForm() {
         await fetchCartFromDB();
       }
 
-      router.push("/homePage");
+      if (res.data.user.role === "admin") {
+        router.push("/admin/dashboard");
+      } else if (res.data.user.role === "seller") {
+        router.push("/seller/dashboard");
+      } else {
+        router.push("/homePage");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid OTP");
     } finally {
@@ -133,8 +150,8 @@ export default function LoginForm() {
               setStep("login");
             }}
             className={`w-1/2 py-2 text-sm cursor-pointer transition ${mode === "password"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-100"
+              ? "bg-gray-800 text-white"
+              : "bg-gray-100"
               }`}
           >
             Password
@@ -146,8 +163,8 @@ export default function LoginForm() {
               setStep("login");
             }}
             className={`w-1/2 py-2 text-sm cursor-pointer transition ${mode === "otp"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-100"
+              ? "bg-gray-800 text-white"
+              : "bg-gray-100"
               }`}
           >
             Email OTP
