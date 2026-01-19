@@ -42,10 +42,6 @@ export default function SellerDashboard() {
     }
   };
 
-  const pendingCount = products.filter(p => p.status === "pending").length;
-  const approvedCount = products.filter(p => p.status === "approved").length;
-  const rejectedCount = products.filter(p => p.status === "rejected").length;
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2]">
@@ -59,26 +55,22 @@ export default function SellerDashboard() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-light text-black">
-            Seller Dashboard
-          </h1>
+          <div className="flex items-center gap-4">
+
+            <h1 className="text-3xl font-light text-black">
+              Seller Dashboard
+            </h1>
+          </div>
 
           <button
             onClick={() => router.push("/seller/add-product")}
-            className="flex items-center gap-2 bg-black text-white px-6 py-2 hover:bg-gray-800 transition"
+            className="flex items-center gap-2 bg-black text-white px-6 py-2 hover:bg-gray-800 transition cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             Add Product
           </button>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-          <StatCard label="Total Products" value={products.length} />
-          <StatCard label="Pending" value={pendingCount} color="yellow" />
-          <StatCard label="Approved" value={approvedCount} color="green" />
-          <StatCard label="Rejected" value={rejectedCount} color="red" />
-        </div>
 
         {/* Product Table */}
         <div className="bg-white border border-gray-200">
@@ -92,22 +84,24 @@ export default function SellerDashboard() {
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
                 <tr>
+                  <th className="px-6 py-4">Image</th>
                   <th className="px-6 py-4">Name</th>
                   <th className="px-6 py-4">Price</th>
                   <th className="px-6 py-4">Stock</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Actions</th>
                 </tr>
               </thead>
 
               <tbody className="divide-y">
                 {products.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-10 text-center text-gray-500">
-                      No products yet.  
+                    <td
+                      colSpan="4"
+                      className="px-6 py-10 text-center text-gray-500"
+                    >
+                      No products yet.
                       <button
                         onClick={() => router.push("/seller/add-product")}
-                        className="ml-2 underline text-black"
+                        className="ml-2 underline text-black cursor-pointer"
                       >
                         Add your first product
                       </button>
@@ -115,22 +109,40 @@ export default function SellerDashboard() {
                   </tr>
                 ) : (
                   products.map((p) => (
-                    <tr key={p._id} className="hover:bg-gray-50">
+                    <tr
+                      key={p._id}
+                      className="hover:bg-gray-50 transition"
+                    >
+                      {/* IMAGE CELL */}
+                      <td className="px-6 py-4">
+                        <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
+                          <img
+                            src={p.image_url}
+                            alt={p.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </td>
+
+                      {/* NAME */}
                       <td className="px-6 py-4 font-medium text-black">
                         {p.name}
                       </td>
-                      <td className="px-6 py-4">₹{p.price}</td>
-                      <td className="px-6 py-4">{p.stock}</td>
-                      <td className="px-6 py-4">
-                        <StatusBadge status={p.status} />
+
+                      {/* PRICE */}
+                      <td className="px-6 py-4 text-gray-700">
+                        ₹{p.price}
                       </td>
-                      <td className="px-6 py-4 text-gray-400 text-sm">
-                        Edit / Delete
+
+                      {/* STOCK */}
+                      <td className="px-6 py-4 text-gray-700">
+                        {p.stock}
                       </td>
                     </tr>
                   ))
                 )}
               </tbody>
+
             </table>
           </div>
         </div>

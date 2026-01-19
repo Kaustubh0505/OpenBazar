@@ -24,7 +24,7 @@ export function Cart({ isOpen, onClose }) {
 
       {/* Cart Drawer */}
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 flex flex-col border-l border-gray-200">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-black">
@@ -32,7 +32,7 @@ export function Cart({ isOpen, onClose }) {
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 transition"
+            className="p-2 hover:bg-gray-100 transition cursor-pointer"
           >
             <X className="h-5 w-5 text-black" />
           </button>
@@ -74,7 +74,7 @@ export function Cart({ isOpen, onClose }) {
                         onClick={() =>
                           updateQuantity(item._id, item.quantity - 1)
                         }
-                        className="h-7 w-7 flex items-center justify-center border border-gray-300 hover:border-black transition"
+                        className="h-7 w-7 flex items-center justify-center border border-gray-300 hover:border-black transition cursor-pointer"
                       >
                         <Minus className="h-3.5 w-3.5" />
                       </button>
@@ -87,14 +87,14 @@ export function Cart({ isOpen, onClose }) {
                         onClick={() =>
                           updateQuantity(item._id, item.quantity + 1)
                         }
-                        className="h-7 w-7 flex items-center justify-center border border-gray-300 hover:border-black transition"
+                        className="h-7 w-7 flex items-center justify-center border border-gray-300 hover:border-black transition cursor-pointer"
                       >
                         <Plus className="h-3.5 w-3.5" />
                       </button>
 
                       <button
                         onClick={() => removeFromCart(item._id)}
-                        className="ml-auto text-gray-400 hover:text-red-600 transition"
+                        className="ml-auto text-gray-400 hover:text-red-600 transition cursor-pointer"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -116,13 +116,13 @@ export function Cart({ isOpen, onClose }) {
               </span>
             </div>
 
-            <button className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition">
+            <button className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition cursor-pointer">
               Proceed to Checkout
             </button>
 
             <button
               onClick={clearCart}
-              className="w-full border border-gray-300 text-sm py-2 hover:border-black transition"
+              className="w-full border border-gray-300 text-sm py-2 hover:border-black transition cursor-pointer"
             >
               Clear Cart
             </button>

@@ -84,6 +84,15 @@ export default function CheckoutAddress() {
         {/* Progress */}
         <CheckoutSteps />
 
+        <div className="mb-6">
+          <button
+            onClick={() => router.push("/cart")}
+            className="text-gray-500 hover:text-black flex items-center gap-2 cursor-pointer"
+          >
+            &larr; Back to Cart
+          </button>
+        </div>
+
         <h1 className="text-2xl font-light text-black mb-6">
           Select Delivery Address
         </h1>
@@ -101,7 +110,7 @@ export default function CheckoutAddress() {
               </p>
               <button
                 onClick={() => router.push("/account/profile")}
-                className="bg-black text-white px-6 py-2"
+                className="bg-black text-white px-6 py-2 cursor-pointer"
               >
                 <Plus className="inline w-4 h-4 mr-2" />
                 Add Address
@@ -114,10 +123,9 @@ export default function CheckoutAddress() {
                 onClick={() => setSelectedAddress(addr._id)}
                 className={`
                   border p-5 cursor-pointer transition relative bg-white
-                  ${
-                    selectedAddress === addr._id
-                      ? "border-black"
-                      : "border-gray-200 hover:border-gray-300"
+                  ${selectedAddress === addr._id
+                    ? "border-black"
+                    : "border-gray-200 hover:border-gray-300"
                   }
                 `}
               >
@@ -150,7 +158,7 @@ export default function CheckoutAddress() {
           <div className="flex justify-between items-center bg-white border border-gray-200 p-4">
             <button
               onClick={() => router.push("/account/profile")}
-              className="text-sm text-gray-600 underline"
+              className="text-sm text-gray-600 underline cursor-pointer"
             >
               Manage Addresses
             </button>
@@ -158,7 +166,7 @@ export default function CheckoutAddress() {
             <button
               onClick={handleContinue}
               disabled={!selectedAddress}
-              className="bg-black text-white px-8 py-3 flex items-center gap-2 disabled:opacity-50"
+              className="bg-black text-white px-8 py-3 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               Continue <ArrowRight className="h-4 w-4" />
             </button>

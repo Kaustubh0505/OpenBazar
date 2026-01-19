@@ -43,7 +43,7 @@ function SuccessContent() {
         {/* CTA */}
         <button
           onClick={() => router.push("/homePage")}
-          className="w-full bg-black text-white py-3 font-medium flex items-center justify-center gap-2"
+          className="w-full bg-black text-white py-3 font-medium flex items-center justify-center gap-2 cursor-pointer"
         >
           Continue Shopping <ArrowRight className="w-4 h-4" />
         </button>

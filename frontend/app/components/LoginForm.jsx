@@ -149,11 +149,10 @@ export default function LoginForm() {
               setMode("password");
               setStep("login");
             }}
-            className={`w-1/2 py-2 text-sm transition ${
-              mode === "password"
+            className={`w-1/2 py-2 text-sm transition cursor-pointer ${mode === "password"
                 ? "bg-black text-white"
                 : "bg-white text-gray-600"
-            }`}
+              }`}
           >
             Password
           </button>
@@ -163,11 +162,10 @@ export default function LoginForm() {
               setMode("otp");
               setStep("login");
             }}
-            className={`w-1/2 py-2 text-sm transition ${
-              mode === "otp"
+            className={`w-1/2 py-2 text-sm transition cursor-pointer ${mode === "otp"
                 ? "bg-black text-white"
                 : "bg-white text-gray-600"
-            }`}
+              }`}
           >
             Email OTP
           </button>
@@ -197,7 +195,7 @@ export default function LoginForm() {
             <div className="text-right mb-5">
               <button
                 type="button"
-                className="text-xs text-gray-500 hover:text-black"
+                className="text-xs text-gray-500 hover:text-black cursor-pointer"
               >
                 Forgot password?
               </button>
@@ -206,7 +204,7 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Logging in..." : "Log in"}
             </button>
@@ -228,7 +226,7 @@ export default function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Sending OTP..." : "Send OTP"}
             </button>
@@ -250,7 +248,7 @@ export default function LoginForm() {
               type="button"
               onClick={handleVerifyOtp}
               disabled={loading}
-              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Verifying..." : "Verify OTP"}
             </button>
@@ -262,7 +260,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => router.push("/auth/signup")}
-            className="text-black underline"
+            className="text-black underline cursor-pointer"
           >
             Sign up
           </button>

@@ -157,7 +157,7 @@ export default function SignupForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Sending OTP..." : "Sign Up"}
             </button>
@@ -183,7 +183,7 @@ export default function SignupForm() {
               type="button"
               onClick={handleVerifyOtp}
               disabled={loading}
-              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Verifying..." : "Verify OTP"}
             </button>
@@ -195,7 +195,7 @@ export default function SignupForm() {
           <button
             type="button"
             onClick={() => router.push("/auth/login")}
-            className="text-black underline"
+            className="text-black underline cursor-pointer"
           >
             Login
           </button>

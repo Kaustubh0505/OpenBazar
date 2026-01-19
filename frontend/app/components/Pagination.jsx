@@ -33,7 +33,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }) {
 
   return (
     <div className="flex items-center justify-center gap-2 mt-12">
-      
+
       {/* Previous */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
@@ -45,6 +45,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }) {
           hover:border-black
           disabled:opacity-40 disabled:cursor-not-allowed
           transition
+          cursor-pointer
         "
       >
         <ChevronLeft className="h-4 w-4" />
@@ -60,10 +61,10 @@ export function Pagination({ currentPage, totalPages, onPageChange }) {
             min-w-[40px] h-10 px-2
             text-sm font-medium
             transition
-            ${
-              page === currentPage
-                ? "bg-black text-white"
-                : page === "..."
+            cursor-pointer
+            ${page === currentPage
+              ? "bg-black text-white"
+              : page === "..."
                 ? "text-gray-400 cursor-default"
                 : "border border-gray-300 text-black hover:border-black"
             }
@@ -84,6 +85,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }) {
           hover:border-black
           disabled:opacity-40 disabled:cursor-not-allowed
           transition
+          cursor-pointer
         "
       >
         <ChevronRight className="h-4 w-4" />

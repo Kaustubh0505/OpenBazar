@@ -70,6 +70,7 @@ export default function VerifyOtpForm() {
             py-2.5 text-sm font-medium
             hover:bg-gray-800 transition
             disabled:opacity-50
+            cursor-pointer
           "
         >
           {loading ? "Verifying..." : "Verify"}

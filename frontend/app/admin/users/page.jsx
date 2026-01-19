@@ -47,7 +47,7 @@ export default function UserManagement() {
         <div className="min-h-screen bg-gray-100 p-8">
             <div className="max-w-6xl mx-auto">
                 <div className="flex items-center gap-4 mb-8">
-                    <button onClick={() => router.back()} className="text-gray-500 hover:text-black">&larr; Back</button>
+                    <button onClick={() => router.back()} className="text-gray-500 hover:text-black cursor-pointer">&larr; Back</button>
                     <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
                 </div>
 
@@ -85,9 +85,9 @@ export default function UserManagement() {
                                                 <button
                                                     onClick={() => toggleBlock(user._id)}
                                                     className={`text-xs px-3 py-1 rounded-full font-medium transition ${user.isBlocked
-                                                            ? "bg-green-100 text-green-700 hover:bg-green-200"
-                                                            : "bg-red-100 text-red-700 hover:bg-red-200"
-                                                        }`}
+                                                        ? "bg-green-100 text-green-700 hover:bg-green-200"
+                                                        : "bg-red-100 text-red-700 hover:bg-red-200"
+                                                        } cursor-pointer`}
                                                 >
                                                     {user.isBlocked ? "Unblock" : "Block"}
                                                 </button>

@@ -73,11 +73,10 @@ export function ProductCard({ product }) {
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
-              className={`h-3.5 w-3.5 ${
-                i < Math.floor(product.rating)
+              className={`h-3.5 w-3.5 ${i < Math.floor(product.rating)
                   ? "fill-black text-black"
                   : "text-gray-300"
-              }`}
+                }`}
             />
           ))}
           <span className="text-xs text-gray-500 ml-1">
@@ -91,11 +90,10 @@ export function ProductCard({ product }) {
             ${product.price.toFixed(2)}
           </span>
           <span
-            className={`text-xs ${
-              product.stock > 0
+            className={`text-xs ${product.stock > 0
                 ? "text-gray-500"
                 : "text-red-500"
-            }`}
+              }`}
           >
             {product.stock > 0
               ? `${product.stock} in stock`
@@ -110,13 +108,14 @@ export function ProductCard({ product }) {
           className={`
             w-full flex items-center justify-center gap-2
             py-2 text-sm font-medium tracking-wide
+            cursor-pointer
+            border-gray-400
             transition-all duration-300
-            ${
-              product.stock === 0
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : isAdding
-                ? "bg-black text-white"
-                : "bg-black text-white hover:bg-gray-800"
+            ${product.stock === 0
+              ? ""
+              : isAdding
+                ? "bg-[#f7f5f2] text-black"
+                : "bg-[#f7f5f2] text-black hover:bg-gray-200"
             }
           `}
         >
@@ -124,8 +123,8 @@ export function ProductCard({ product }) {
           {isAdding
             ? "Added"
             : product.stock === 0
-            ? "Out of Stock"
-            : "Add to Cart"}
+              ? "Out of Stock"
+              : "Add to Cart"}
         </button>
       </div>
     </div>

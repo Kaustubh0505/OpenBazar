@@ -62,7 +62,7 @@ export const createProduct = async (req, res) => {
             category_id,
             stock,
             seller_id: req.user._id,
-            status: req.user.role === "admin" ? "approved" : "pending"
+            status: "approved"
         });
 
         await product.save();

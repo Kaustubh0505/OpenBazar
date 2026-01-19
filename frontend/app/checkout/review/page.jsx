@@ -57,6 +57,15 @@ export default function CheckoutReview() {
       <div className="max-w-4xl mx-auto">
         <CheckoutSteps />
 
+        <div className="mb-6">
+          <button
+            onClick={() => router.push("/checkout/address")}
+            className="text-gray-500 hover:text-black flex items-center gap-2 cursor-pointer"
+          >
+            &larr; Back to Address
+          </button>
+        </div>
+
         <h1 className="text-2xl font-light text-black mb-8">
           Review Your Order
         </h1>
@@ -73,7 +82,7 @@ export default function CheckoutReview() {
                 </h2>
                 <button
                   onClick={() => router.push("/checkout/address")}
-                  className="text-sm underline text-gray-600"
+                  className="text-sm underline text-gray-600 cursor-pointer"
                 >
                   Change
                 </button>
@@ -161,7 +170,7 @@ export default function CheckoutReview() {
 
               <button
                 onClick={() => router.push("/checkout/payment")}
-                className="w-full bg-black text-white py-3 mt-6 flex items-center justify-center gap-2"
+                className="w-full bg-black text-white py-3 mt-6 flex items-center justify-center gap-2 cursor-pointer"
               >
                 Continue to Payment <ArrowRight className="h-4 w-4" />
               </button>

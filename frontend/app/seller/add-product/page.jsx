@@ -184,7 +184,7 @@ export default function AddProduct() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-6 py-2 text-gray-600"
+              className="px-6 py-2 text-gray-600 cursor-pointer"
             >
               Cancel
             </button>
@@ -192,7 +192,7 @@ export default function AddProduct() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-black text-white px-6 py-2 flex items-center gap-2 disabled:opacity-50"
+              className="bg-black text-white px-6 py-2 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
               Add Product

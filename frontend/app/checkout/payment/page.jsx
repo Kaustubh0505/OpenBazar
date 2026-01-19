@@ -94,6 +94,15 @@ export default function CheckoutPayment() {
         {/* Progress */}
         <CheckoutSteps />
 
+        <div className="mb-6">
+          <button
+            onClick={() => router.push("/checkout/review")}
+            className="text-gray-500 hover:text-black flex items-center gap-2 cursor-pointer"
+          >
+            &larr; Back to Review
+          </button>
+        </div>
+
         <h1 className="text-2xl font-light text-black mb-6">
           Payment Method
         </h1>
@@ -131,7 +140,7 @@ export default function CheckoutPayment() {
         <button
           onClick={handlePlaceOrder}
           disabled={loading}
-          className="w-full bg-black text-white py-4 text-lg font-medium disabled:opacity-50"
+          className="w-full bg-black text-white py-4 text-lg font-medium disabled:opacity-50 cursor-pointer"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">

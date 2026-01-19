@@ -74,6 +74,14 @@ export default function ThriftStorePage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
+          <div className="flex justify-start mb-4">
+            <button
+              onClick={() => router.push("/homePage")}
+              className="text-gray-500 hover:text-black cursor-pointer"
+            >
+              &larr; Back to Home
+            </button>
+          </div>
           <h1 className="text-4xl font-light text-black mb-3">
             Thrift Store
           </h1>
@@ -82,7 +90,7 @@ export default function ThriftStorePage() {
           </p>
           <button
             onClick={() => router.push("/sell-item")}
-            className="bg-black text-white px-6 py-3 text-sm hover:bg-gray-800 transition"
+            className="bg-black text-white px-6 py-3 text-sm hover:bg-gray-800 transition cursor-pointer"
           >
             Sell Your Item
           </button>
@@ -106,7 +114,7 @@ export default function ThriftStorePage() {
             </p>
             <button
               onClick={() => router.push("/sell-item")}
-              className="bg-black text-white px-6 py-3 text-sm hover:bg-gray-800 transition"
+              className="bg-black text-white px-6 py-3 text-sm hover:bg-gray-800 transition cursor-pointer"
             >
               List Your First Item
             </button>
@@ -156,7 +164,7 @@ export default function ThriftStorePage() {
                       handleBuyItem(item._id, item.seller_id?._id)
                     }
                     disabled={buyingItemId === item._id}
-                    className="w-full bg-black text-white py-2 text-sm hover:bg-gray-800 transition disabled:opacity-50"
+                    className="w-full bg-black text-white py-2 text-sm hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
                   >
                     {buyingItemId === item._id ? (
                       <span className="flex items-center justify-center gap-2">

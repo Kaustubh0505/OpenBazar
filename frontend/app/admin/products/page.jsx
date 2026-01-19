@@ -47,7 +47,7 @@ export default function ProductApproval() {
         <div className="min-h-screen bg-gray-100 p-8">
             <div className="max-w-6xl mx-auto">
                 <div className="flex items-center gap-4 mb-8">
-                    <button onClick={() => router.back()} className="text-gray-500 hover:text-black">&larr; Back</button>
+                    <button onClick={() => router.back()} className="text-gray-500 hover:text-black cursor-pointer">&larr; Back</button>
                     <h1 className="text-3xl font-bold text-gray-800">Product Approvals</h1>
                 </div>
 
@@ -88,13 +88,13 @@ export default function ProductApproval() {
                                                 <div className="flex gap-2">
                                                     <button
                                                         onClick={() => handleAction(product._id, "approve")}
-                                                        className="bg-green-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-green-600 transition"
+                                                        className="bg-green-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-green-600 transition cursor-pointer"
                                                     >
                                                         Approve
                                                     </button>
                                                     <button
                                                         onClick={() => handleAction(product._id, "reject")}
-                                                        className="bg-red-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-red-600 transition"
+                                                        className="bg-red-500 text-white px-3 py-1 rounded text-xs font-medium hover:bg-red-600 transition cursor-pointer"
                                                     >
                                                         Reject
                                                     </button>

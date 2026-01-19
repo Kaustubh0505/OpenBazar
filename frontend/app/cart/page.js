@@ -137,7 +137,7 @@ export default function CartPage() {
                                                                 item.quantity - 1
                                                             )
                                                         }
-                                                        className="w-8 h-8 bg-gray-700 text-white rounded"
+                                                        className="w-8 h-8 bg-gray-700 text-white rounded cursor-pointer"
                                                     >
                                                         <Minus className="h-4 w-4 mx-auto" />
                                                     </button>
@@ -153,7 +153,7 @@ export default function CartPage() {
                                                                 item.quantity + 1
                                                             )
                                                         }
-                                                        className="w-8 h-8 bg-gray-700 text-white rounded"
+                                                        className="w-8 h-8 bg-gray-700 text-white rounded cursor-pointer"
                                                     >
                                                         <Plus className="h-4 w-4 mx-auto" />
                                                     </button>
@@ -163,7 +163,7 @@ export default function CartPage() {
                                                         onClick={() =>
                                                             removeFromCart(item._id)
                                                         }
-                                                        className="p-2 text-red-600"
+                                                        className="p-2 text-red-600 cursor-pointer"
                                                     >
                                                         <Trash2 className="h-5 w-5" />
                                                     </button>

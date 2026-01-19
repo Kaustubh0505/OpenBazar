@@ -112,6 +112,14 @@ export default function SellItemPage() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
+          <div className="flex justify-start mb-4">
+            <button
+              onClick={() => router.push("/thrift-store")}
+              className="text-gray-500 hover:text-black cursor-pointer"
+            >
+              &larr; Back to Thrift Store
+            </button>
+          </div>
           <h1 className="text-3xl font-light text-black mb-2">
             Sell Your Item
           </h1>
@@ -143,7 +151,7 @@ export default function SellItemPage() {
                         setImageFile(null);
                         setImagePreview(null);
                       }}
-                      className="absolute top-2 right-2 bg-black text-white p-1"
+                      className="absolute top-2 right-2 bg-black text-white p-1 cursor-pointer"
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -219,7 +227,7 @@ export default function SellItemPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
+                className="flex-1 bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -237,7 +245,7 @@ export default function SellItemPage() {
               <button
                 type="button"
                 onClick={() => router.push("/homePage")}
-                className="border border-gray-300 px-6 py-3 text-sm hover:border-black transition"
+                className="border border-gray-300 px-6 py-3 text-sm hover:border-black transition cursor-pointer"
               >
                 Cancel
               </button>

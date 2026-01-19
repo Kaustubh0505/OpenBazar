@@ -27,11 +27,10 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
           <button
             onClick={() => onCategorySelect(null)}
             className={`
-              w-full text-left px-4 py-2 text-sm transition
-              ${
-                selectedCategory === null
-                  ? "bg-black text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+              w-full text-left px-4 py-2 text-sm transition cursor-pointer
+              ${selectedCategory === null
+                ? "bg-black text-white"
+                : "text-gray-700 hover:bg-gray-100"
               }
             `}
           >
@@ -44,11 +43,10 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
             <button
               onClick={() => onCategorySelect(category._id)}
               className={`
-                w-full text-left px-4 py-2 text-sm transition
-                ${
-                  selectedCategory === category._id
-                    ? "bg-black text-white"
-                    : "text-gray-700 hover:bg-gray-100"
+                w-full text-left px-4 py-2 text-sm transition cursor-pointer
+                ${selectedCategory === category._id
+                  ? "bg-black text-white"
+                  : "text-gray-700 hover:bg-gray-100"
                 }
               `}
             >
@@ -74,6 +72,7 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
                 text-gray-700
                 hover:bg-gray-100
                 transition
+                cursor-pointer
               "
             >
               <PackagePlus className="h-4 w-4" />
@@ -90,6 +89,7 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
                 text-gray-700
                 hover:bg-gray-100
                 transition
+                cursor-pointer
               "
             >
               <Store className="h-4 w-4" />

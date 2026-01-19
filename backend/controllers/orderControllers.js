@@ -2,6 +2,8 @@ import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import Cart from "../models/Cart.js";
 
+import { sendEmail } from "../utils/sendEmail.js";
+
 // Create a new order
 export const createOrder = async (req, res) => {
     try {
@@ -42,6 +44,15 @@ export const createOrder = async (req, res) => {
         // Clear user's cart
         await Cart.findOneAndDelete({ user: req.user._id });
 
+        // Send Email to User
+        if (req.user.email) {
+            const emailSubject = `Order Confirmation - #${order._id}`;
+            const emailText = `Thank you for your order!\n\nOrder ID: ${order._id}\nTotal Amount: ₹${totalAmount}\n\nWe will notify you when your order is shipped.`;
+
+            // Send email asynchronously to not block response
+            sendEmail({ to: req.user.email, subject: emailSubject, text: emailText }).catch(err => console.error("Failed to send order email:", err));
+        }
+
         res.status(201).json(order);
     } catch (error) {
         res.status(500).json({ message: "Error creating order", error: error.message });
@@ -58,5 +69,48 @@ export const getUserOrders = async (req, res) => {
         res.status(200).json(orders);
     } catch (error) {
         res.status(500).json({ message: "Error fetching orders", error: error.message });
+    }
+};
+
+// Get ALL orders (Admin)
+export const getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({})
+            .sort({ createdAt: -1 })
+            .populate("user", "name email")
+            .populate("items.product", "name image_url");
+
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching all orders", error: error.message });
+    }
+};
+
+// Update order status (Admin)
+export const updateOrderStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const order = await Order.findById(id).populate("user", "email name");
+
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
+        order.status = status;
+        await order.save();
+
+        // Send Email if Delivered
+        if (status === "delivered" && order.user && order.user.email) {
+            const emailSubject = `Order Delivered - #${order._id}`;
+            const emailText = `Hello ${order.user.name},\n\nYour order #${order._id} has been delivered successfully.\n\nThank you for shopping with us!`;
+
+            sendEmail({ to: order.user.email, subject: emailSubject, text: emailText }).catch(err => console.error("Failed to send delivery email:", err));
+        }
+
+        res.status(200).json(order);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating order status", error: error.message });
     }
 };
