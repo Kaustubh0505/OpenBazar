@@ -47,10 +47,10 @@ export default function LoginForm() {
           password: formData.password,
         }
       );
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.user.role);
 
-      // Sync cart with database after login
       if (cart.length > 0) {
         await syncCartWithDB(cart);
       } else {
@@ -81,7 +81,7 @@ export default function LoginForm() {
     try {
       setLoading(true);
       await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKENDURL}}/api/auth/login/send-otp`,
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/login/send-otp`,
         { email: formData.email }
       );
       setStep("otp");
@@ -103,10 +103,10 @@ export default function LoginForm() {
         `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/login/verify-otp`,
         { email: formData.email, otp }
       );
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.user.role);
 
-      // Sync cart with database after login
       if (cart.length > 0) {
         await syncCartWithDB(cart);
       } else {
@@ -128,13 +128,13 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2] px-4">
       <form
         onSubmit={mode === "password" ? handlePasswordLogin : handleSendOtp}
-        className="bg-white text-gray-600 w-full max-w-[350px] p-6 rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10"
+        className="w-full max-w-[360px] bg-white border border-gray-200 px-6 py-8 rounded-sm shadow-sm"
       >
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-          Login Now
+        <h2 className="text-2xl font-semibold text-black text-center mb-6">
+          Welcome Back
         </h2>
 
         {error && (
@@ -142,17 +142,18 @@ export default function LoginForm() {
         )}
 
         {/* MODE TOGGLE */}
-        <div className="flex mb-5 rounded-full overflow-hidden border border-gray-300">
+        <div className="flex mb-6 border border-gray-300 rounded-full overflow-hidden">
           <button
             type="button"
             onClick={() => {
               setMode("password");
               setStep("login");
             }}
-            className={`w-1/2 py-2 text-sm cursor-pointer transition ${mode === "password"
-              ? "bg-gray-800 text-white"
-              : "bg-gray-100"
-              }`}
+            className={`w-1/2 py-2 text-sm transition ${
+              mode === "password"
+                ? "bg-black text-white"
+                : "bg-white text-gray-600"
+            }`}
           >
             Password
           </button>
@@ -162,10 +163,11 @@ export default function LoginForm() {
               setMode("otp");
               setStep("login");
             }}
-            className={`w-1/2 py-2 text-sm cursor-pointer transition ${mode === "otp"
-              ? "bg-gray-800 text-white"
-              : "bg-gray-100"
-              }`}
+            className={`w-1/2 py-2 text-sm transition ${
+              mode === "otp"
+                ? "bg-black text-white"
+                : "bg-white text-gray-600"
+            }`}
           >
             Email OTP
           </button>
@@ -180,7 +182,7 @@ export default function LoginForm() {
               placeholder="Email or Phone"
               value={formData.identifier}
               onChange={handleChange}
-              className="w-full border my-3 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
             />
 
             <input
@@ -189,22 +191,22 @@ export default function LoginForm() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border mt-1 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-3 focus:outline-none focus:border-black"
             />
 
-            <div className="text-right py-4">
+            <div className="text-right mb-5">
               <button
                 type="button"
-                className="text-gray-600 text-sm underline"
+                className="text-xs text-gray-500 hover:text-black"
               >
-                Forgot Password?
+                Forgot password?
               </button>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full cursor-pointer mb-3 bg-gray-800 hover:bg-gray-600 active:scale-95 transition py-2.5 rounded-full text-white disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
             >
               {loading ? "Logging in..." : "Log in"}
             </button>
@@ -220,13 +222,13 @@ export default function LoginForm() {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border my-4 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 focus:outline-none focus:border-black"
             />
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full cursor-pointer mb-3 bg-gray-800 hover:bg-gray-600 active:scale-95 transition py-2.5 rounded-full text-white disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
             >
               {loading ? "Sending OTP..." : "Send OTP"}
             </button>
@@ -241,28 +243,28 @@ export default function LoginForm() {
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full border my-4 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 focus:outline-none focus:border-black"
             />
 
             <button
               type="button"
               onClick={handleVerifyOtp}
               disabled={loading}
-              className="w-full mb-3 cursor-pointer bg-green-500 hover:bg-green-600 active:scale-95 transition py-2.5 rounded-full text-white disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
             >
               {loading ? "Verifying..." : "Verify OTP"}
             </button>
           </>
         )}
 
-        <p className="text-center mt-4 text-sm">
+        <p className="text-center text-sm text-gray-600 mt-6">
           Don’t have an account?{" "}
           <button
             type="button"
             onClick={() => router.push("/auth/signup")}
-            className="text-gray-500 cursor-pointer underline"
+            className="text-black underline"
           >
-            Signup Now
+            Sign up
           </button>
         </p>
       </form>

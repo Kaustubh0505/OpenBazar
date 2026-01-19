@@ -5,19 +5,35 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
   const router = useRouter();
 
   return (
-    <aside className="w-full lg:w-64 bg-white rounded-lg shadow-md p-4 h-fit sticky top-20">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
+    <aside
+      className="
+        w-full lg:w-64
+        bg-white
+        border border-gray-200
+        rounded-sm
+        p-5
+        h-fit
+        sticky top-24
+      "
+    >
+      {/* Title */}
+      <h2 className="text-lg font-semibold text-black mb-5 tracking-wide">
         Categories
       </h2>
 
+      {/* Categories */}
       <ul className="space-y-1">
         <li>
           <button
             onClick={() => onCategorySelect(null)}
-            className={`w-full cursor-pointer text-left px-4 py-2.5 rounded-lg transition-colors ${selectedCategory === null
-              ? "bg-gray-800 text-white font-medium"
-              : "text-gray-700 hover:bg-gray-100"
-              }`}
+            className={`
+              w-full text-left px-4 py-2 text-sm transition
+              ${
+                selectedCategory === null
+                  ? "bg-black text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }
+            `}
           >
             All Products
           </button>
@@ -27,10 +43,14 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
           <li key={category._id}>
             <button
               onClick={() => onCategorySelect(category._id)}
-              className={`w-full cursor-pointer text-left px-4 py-2.5 rounded-lg transition-colors ${selectedCategory === category._id
-                ? "bg-gray-800 text-white font-medium"
-                : "text-gray-700 hover:bg-gray-100"
-                }`}
+              className={`
+                w-full text-left px-4 py-2 text-sm transition
+                ${
+                  selectedCategory === category._id
+                    ? "bg-black text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                }
+              `}
             >
               {category.name}
             </button>
@@ -38,25 +58,39 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
         ))}
       </ul>
 
-      {/* Thrift Marketplace Section */}
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+      {/* Thrift Marketplace */}
+      <div className="mt-8 pt-6 border-t border-gray-200">
+        <h3 className="text-xs font-semibold text-gray-500 uppercase mb-4 tracking-wider">
           Thrift Marketplace
         </h3>
+
         <ul className="space-y-1">
           <li>
             <button
-              onClick={() => router.push('/sell-item')}
-              className="w-full cursor-pointer text-left px-4 py-2.5 rounded-lg transition-colors text-gray-700 hover:bg-green-50 hover:text-green-700 flex items-center gap-2"
+              onClick={() => router.push("/sell-item")}
+              className="
+                w-full flex items-center gap-3
+                px-4 py-2 text-sm
+                text-gray-700
+                hover:bg-gray-100
+                transition
+              "
             >
               <PackagePlus className="h-4 w-4" />
               Sell Your Item
             </button>
           </li>
+
           <li>
             <button
-              onClick={() => router.push('/thrift-store')}
-              className="w-full cursor-pointer text-left px-4 py-2.5 rounded-lg transition-colors text-gray-700 hover:bg-blue-50 hover:text-blue-700 flex items-center gap-2"
+              onClick={() => router.push("/thrift-store")}
+              className="
+                w-full flex items-center gap-3
+                px-4 py-2 text-sm
+                text-gray-700
+                hover:bg-gray-100
+                transition
+              "
             >
               <Store className="h-4 w-4" />
               Buy Thrifted Items

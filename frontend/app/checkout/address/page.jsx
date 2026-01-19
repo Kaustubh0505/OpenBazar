@@ -3,131 +3,200 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Plus, CheckCircle, ArrowRight } from "lucide-react";
+import { Plus, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 
 export default function CheckoutAddress() {
-    const router = useRouter();
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [selectedAddress, setSelectedAddress] = useState(null);
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [error, setError] = useState("");
 
-    // Form State (Reuse from Profile logic potentially, but for now inline simple add)
-    // For MVP, if no address, redirect to Profile or show simple form. 
-    // Let's redirect to profile for adding new addresses to keep it DRY for now, or fetch addresses.
+  useEffect(() => {
+    fetchAddresses();
+  }, []);
 
-    useEffect(() => {
-        fetchAddresses();
-    }, []);
+  const fetchAddresses = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
 
-    const fetchAddresses = async () => {
-        try {
-            const token = localStorage.getItem("token");
-            if (!token) return router.push("/auth/login");
+      if (!token) {
+        router.push("/auth/login");
+        return;
+      }
 
-            const res = await axios.get(
-                `${process.env.NEXT_PUBLIC_BACKENDURL}/api/user/profile`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setUser(res.data);
+      // Optional safety: checkout only for buyers
+      if (role && role !== "buyer") {
+        router.push("/homePage");
+        return;
+      }
 
-            // Auto-select default
-            const defaultAddr = res.data.addresses.find(a => a.isDefault) || res.data.addresses[0];
-            if (defaultAddr) setSelectedAddress(defaultAddr._id);
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/user/profile`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        } catch (error) {
-            console.error("Error fetching addresses:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+      const addresses = res.data.addresses || [];
+      setUser({ ...res.data, addresses });
 
-    const handleContinue = () => {
-        if (!selectedAddress) return alert("Please select an address");
+      const defaultAddr =
+        addresses.find((a) => a.isDefault) || addresses[0];
 
-        const address = user.addresses.find(a => a._id === selectedAddress);
-        // Store selected address temporarily
-        sessionStorage.setItem("shippingAddress", JSON.stringify(address));
-        router.push("/checkout/review");
-    };
+      if (defaultAddr) setSelectedAddress(defaultAddr._id);
+    } catch (err) {
+      console.error("Error fetching addresses:", err);
+      setError("Failed to load addresses");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  const handleContinue = () => {
+    if (!selectedAddress) {
+      setError("Please select a delivery address");
+      return;
+    }
 
-    return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto">
-                {/* Progress Steps */}
-                <div className="flex justify-between items-center mb-10 text-sm font-medium">
-                    <div className="flex items-center text-blue-600">
-                        <span className="w-8 h-8 flex items-center justify-center bg-blue-600 text-white rounded-full mr-2">1</span>
-                        Address
-                    </div>
-                    <div className="flex-1 h-1 bg-gray-200 mx-4"></div>
-                    <div className="flex items-center text-gray-500">
-                        <span className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full mr-2">2</span>
-                        Review
-                    </div>
-                    <div className="flex-1 h-1 bg-gray-200 mx-4"></div>
-                    <div className="flex items-center text-gray-500">
-                        <span className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full mr-2">3</span>
-                        Payment
-                    </div>
-                </div>
-
-                <h1 className="text-2xl font-bold text-gray-900 mb-6">Select Delivery Address</h1>
-
-                <div className="grid gap-4 mb-8">
-                    {user?.addresses?.length === 0 ? (
-                        <div className="text-center p-8 bg-white rounded-lg shadow-sm">
-                            <p className="text-gray-500 mb-4">You don't have any saved addresses.</p>
-                            <button
-                                onClick={() => router.push("/account/profile")}
-                                className="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700"
-                            >
-                                <Plus className="inline w-4 h-4 mr-2" />Add New Address
-                            </button>
-                        </div>
-                    ) : (
-                        user?.addresses?.map((addr) => (
-                            <div
-                                key={addr._id}
-                                onClick={() => setSelectedAddress(addr._id)}
-                                className={`
-                                    bg-white p-6 rounded-lg border-2 cursor-pointer transition-all relative
-                                    ${selectedAddress === addr._id ? "border-blue-600 shadow-md" : "border-gray-200 hover:border-gray-300"}
-                                `}
-                            >
-                                {selectedAddress === addr._id && (
-                                    <CheckCircle className="absolute top-4 right-4 text-blue-600 w-6 h-6" />
-                                )}
-                                <h3 className="font-bold text-gray-800 text-lg">{addr.fullName}</h3>
-                                <p className="text-gray-600 mt-1">{addr.street}</p>
-                                <p className="text-gray-600">{addr.city}, {addr.state} - {addr.pincode}</p>
-                                <p className="text-gray-600">{addr.country}</p>
-                                <p className="text-gray-600 mt-2 font-medium">Phone: {addr.phone}</p>
-                            </div>
-                        ))
-                    )}
-                </div>
-
-                {user?.addresses?.length > 0 && (
-                    <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-gray-100 mt-4">
-                        <button
-                            onClick={() => router.push("/account/profile")}
-                            className="text-gray-600 hover:text-gray-800 font-medium text-sm"
-                        >
-                            + Add / Manage Addresses
-                        </button>
-
-                        <button
-                            onClick={handleContinue}
-                            disabled={!selectedAddress}
-                            className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                        >
-                            Continue to Review <ArrowRight className="w-4 h-4" />
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>
+    const address = user.addresses.find(
+      (a) => a._id === selectedAddress
     );
+
+    sessionStorage.setItem(
+      "shippingAddress",
+      JSON.stringify(address)
+    );
+
+    router.push("/checkout/review");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2]">
+        <Loader2 className="h-10 w-10 animate-spin text-black" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#f7f5f2] py-12 px-4">
+      <div className="max-w-3xl mx-auto">
+        {/* Progress */}
+        <CheckoutSteps />
+
+        <h1 className="text-2xl font-light text-black mb-6">
+          Select Delivery Address
+        </h1>
+
+        {error && (
+          <p className="text-sm text-red-600 mb-4">{error}</p>
+        )}
+
+        {/* Address List */}
+        <div className="grid gap-4 mb-8">
+          {user.addresses.length === 0 ? (
+            <div className="bg-white border border-gray-200 p-8 text-center">
+              <p className="text-gray-600 mb-4">
+                No saved addresses found
+              </p>
+              <button
+                onClick={() => router.push("/account/profile")}
+                className="bg-black text-white px-6 py-2"
+              >
+                <Plus className="inline w-4 h-4 mr-2" />
+                Add Address
+              </button>
+            </div>
+          ) : (
+            user.addresses.map((addr) => (
+              <div
+                key={addr._id}
+                onClick={() => setSelectedAddress(addr._id)}
+                className={`
+                  border p-5 cursor-pointer transition relative bg-white
+                  ${
+                    selectedAddress === addr._id
+                      ? "border-black"
+                      : "border-gray-200 hover:border-gray-300"
+                  }
+                `}
+              >
+                {selectedAddress === addr._id && (
+                  <CheckCircle className="absolute top-4 right-4 text-black h-5 w-5" />
+                )}
+
+                <p className="font-medium text-black">
+                  {addr.fullName}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {addr.street}, {addr.city}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {addr.state} - {addr.pincode}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {addr.country}
+                </p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Phone: {addr.phone}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Footer CTA */}
+        {user.addresses.length > 0 && (
+          <div className="flex justify-between items-center bg-white border border-gray-200 p-4">
+            <button
+              onClick={() => router.push("/account/profile")}
+              className="text-sm text-gray-600 underline"
+            >
+              Manage Addresses
+            </button>
+
+            <button
+              onClick={handleContinue}
+              disabled={!selectedAddress}
+              className="bg-black text-white px-8 py-3 flex items-center gap-2 disabled:opacity-50"
+            >
+              Continue <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Checkout Steps ---------------- */
+
+function CheckoutSteps() {
+  return (
+    <div className="flex items-center justify-between mb-10 text-sm">
+      <Step active label="Address" />
+      <Line />
+      <Step label="Review" />
+      <Line />
+      <Step label="Payment" />
+    </div>
+  );
+}
+
+function Step({ label, active }) {
+  return (
+    <div className={`flex items-center ${active ? "text-black" : "text-gray-400"}`}>
+      <span
+        className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
+        ${active ? "bg-black text-white" : "bg-gray-200"}`}
+      >
+        {label[0]}
+      </span>
+      {label}
+    </div>
+  );
+}
+
+function Line() {
+  return <div className="flex-1 h-px bg-gray-300 mx-4" />;
 }

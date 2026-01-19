@@ -3,130 +3,206 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../../app/context/CartContext";
-import { ArrowLeft, ArrowRight, MapPin, Package, ShoppingBag } from "lucide-react";
+import {
+  ArrowRight,
+  MapPin,
+  Package,
+  ShoppingBag,
+  Loader2,
+} from "lucide-react";
 
 export default function CheckoutReview() {
-    const router = useRouter();
-    const { cart, getTotalPrice } = useCart();
-    const [shippingAddress, setShippingAddress] = useState(null);
+  const router = useRouter();
+  const { cart, getTotalPrice } = useCart();
+  const [shippingAddress, setShippingAddress] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // Load address from session
-        const storedAddr = sessionStorage.getItem("shippingAddress");
-        if (!storedAddr) router.push("/checkout/address");
-        else setShippingAddress(JSON.parse(storedAddr));
-    }, []);
+  useEffect(() => {
+    // Guards
+    if (cart.length === 0) {
+      router.push("/homePage");
+      return;
+    }
 
-    if (!shippingAddress) return null;
+    const role = localStorage.getItem("role");
+    if (role && role !== "buyer") {
+      router.push("/homePage");
+      return;
+    }
 
-    const subtotal = getTotalPrice();
-    const shipping = 0; // Free for now
-    const total = subtotal + shipping;
+    const storedAddr = sessionStorage.getItem("shippingAddress");
+    if (!storedAddr) {
+      router.push("/checkout/address");
+      return;
+    }
 
+    setShippingAddress(JSON.parse(storedAddr));
+    setLoading(false);
+  }, []);
+
+  if (loading) {
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-                {/* Progress Steps */}
-                <div className="flex justify-between items-center mb-10 text-sm font-medium">
-                    <div className="flex items-center text-blue-600">
-                        <span className="w-8 h-8 flex items-center justify-center bg-blue-600 text-white rounded-full mr-2">✓</span>
-                        Address
-                    </div>
-                    <div className="flex-1 h-1 bg-blue-600 mx-4"></div>
-                    <div className="flex items-center text-blue-600">
-                        <span className="w-8 h-8 flex items-center justify-center bg-blue-600 text-white rounded-full mr-2">2</span>
-                        Review
-                    </div>
-                    <div className="flex-1 h-1 bg-gray-200 mx-4"></div>
-                    <div className="flex items-center text-gray-500">
-                        <span className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full mr-2">3</span>
-                        Payment
-                    </div>
-                </div>
-
-                <h1 className="text-2xl font-bold text-gray-900 mb-8">Review Order</h1>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Items & Address */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Shipping Address */}
-                        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-lg font-bold flex items-center gap-2 text-gray-800">
-                                    <MapPin className="w-5 h-5 text-gray-500" /> Shipping Address
-                                </h2>
-                                <button
-                                    onClick={() => router.push("/checkout/address")}
-                                    className="text-blue-600 text-sm hover:underline"
-                                >
-                                    Change
-                                </button>
-                            </div>
-                            <div className="text-gray-700">
-                                <p className="font-semibold">{shippingAddress.fullName}</p>
-                                <p>{shippingAddress.street}</p>
-                                <p>{shippingAddress.city}, {shippingAddress.state} - {shippingAddress.pincode}</p>
-                                <p>{shippingAddress.country}</p>
-                                <p className="mt-1 text-sm text-gray-500">Phone: {shippingAddress.phone}</p>
-                            </div>
-                        </div>
-
-                        {/* Cart Items */}
-                        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                            <h2 className="text-lg font-bold flex items-center gap-2 text-gray-800 mb-4">
-                                <Package className="w-5 h-5 text-gray-500" /> Cart Items ({cart.length})
-                            </h2>
-                            <div className="space-y-4">
-                                {cart.map((item) => (
-                                    <div key={item._id} className="flex gap-4 py-4 border-b last:border-0 border-gray-100">
-                                        <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
-                                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                                            <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
-                                            <p className="font-medium text-gray-800 mt-1">${item.price.toFixed(2)}</p>
-                                        </div>
-                                        <div className="text-right font-bold text-gray-900">
-                                            ${(item.price * item.quantity).toFixed(2)}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Order Summary */}
-                    <div className="lg:col-span-1">
-                        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 sticky top-24">
-                            <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                                <ShoppingBag className="w-5 h-5" /> Order Summary
-                            </h2>
-                            <div className="space-y-3 text-gray-700">
-                                <div className="flex justify-between">
-                                    <span>Subtotal</span>
-                                    <span>${subtotal.toFixed(2)}</span>
-                                </div>
-                                <div className="flex justify-between text-green-600">
-                                    <span>Shipping</span>
-                                    <span>Free</span>
-                                </div>
-                                <div className="border-t pt-3 flex justify-between font-bold text-xl text-gray-900">
-                                    <span>Total</span>
-                                    <span>${total.toFixed(2)}</span>
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={() => router.push("/checkout/payment")}
-                                className="w-full bg-gray-900 text-white py-3 rounded-lg mt-6 font-semibold hover:bg-gray-800 transition flex items-center justify-center gap-2"
-                            >
-                                Continue to Payment <ArrowRight className="w-4 h-4" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2]">
+        <Loader2 className="h-10 w-10 animate-spin text-black" />
+      </div>
     );
+  }
+
+  const subtotal = getTotalPrice();
+  const shipping = 0;
+  const total = subtotal + shipping;
+
+  return (
+    <div className="min-h-screen bg-[#f7f5f2] py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        <CheckoutSteps />
+
+        <h1 className="text-2xl font-light text-black mb-8">
+          Review Your Order
+        </h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Address */}
+            <div className="bg-white border border-gray-200 p-6">
+              <div className="flex justify-between mb-4">
+                <h2 className="flex items-center gap-2 font-medium text-black">
+                  <MapPin className="h-5 w-5" />
+                  Shipping Address
+                </h2>
+                <button
+                  onClick={() => router.push("/checkout/address")}
+                  className="text-sm underline text-gray-600"
+                >
+                  Change
+                </button>
+              </div>
+
+              <p className="font-medium text-black">
+                {shippingAddress.fullName}
+              </p>
+              <p className="text-sm text-gray-600">
+                {shippingAddress.street}
+              </p>
+              <p className="text-sm text-gray-600">
+                {shippingAddress.city}, {shippingAddress.state} –{" "}
+                {shippingAddress.pincode}
+              </p>
+              <p className="text-sm text-gray-600">
+                {shippingAddress.country}
+              </p>
+              <p className="text-sm text-gray-600 mt-1">
+                Phone: {shippingAddress.phone}
+              </p>
+            </div>
+
+            {/* Items */}
+            <div className="bg-white border border-gray-200 p-6">
+              <h2 className="flex items-center gap-2 font-medium text-black mb-4">
+                <Package className="h-5 w-5" />
+                Items ({cart.length})
+              </h2>
+
+              <div className="space-y-4">
+                {cart.map((item) => (
+                  <div
+                    key={item._id}
+                    className="flex gap-4 border-b last:border-0 pb-4"
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-20 h-20 object-cover bg-gray-100"
+                    />
+                    <div className="flex-1">
+                      <p className="font-medium text-black">
+                        {item.name}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Qty: {item.quantity}
+                      </p>
+                      <p className="text-sm text-gray-700 mt-1">
+                        ₹{item.price.toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="font-medium text-black">
+                      ₹{(item.price * item.quantity).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div className="lg:col-span-1">
+            <div className="bg-white border border-gray-200 p-6 sticky top-24">
+              <h2 className="flex items-center gap-2 font-medium text-black mb-4">
+                <ShoppingBag className="h-5 w-5" />
+                Order Summary
+              </h2>
+
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>₹{subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-green-600">
+                  <span>Shipping</span>
+                  <span>Free</span>
+                </div>
+
+                <div className="border-t pt-3 flex justify-between text-lg font-medium">
+                  <span>Total</span>
+                  <span>₹{total.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => router.push("/checkout/payment")}
+                className="w-full bg-black text-white py-3 mt-6 flex items-center justify-center gap-2"
+              >
+                Continue to Payment <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Steps ---------------- */
+
+function CheckoutSteps() {
+  return (
+    <div className="flex items-center justify-between mb-10 text-sm">
+      <Step done label="Address" />
+      <Line done />
+      <Step active label="Review" />
+      <Line />
+      <Step label="Payment" />
+    </div>
+  );
+}
+
+function Step({ label, active, done }) {
+  return (
+    <div className={`flex items-center ${active || done ? "text-black" : "text-gray-400"}`}>
+      <span
+        className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
+        ${done || active ? "bg-black text-white" : "bg-gray-200"}`}
+      >
+        {done ? "✓" : label[0]}
+      </span>
+      {label}
+    </div>
+  );
+}
+
+function Line({ done }) {
+  return (
+    <div className={`flex-1 h-px mx-4 ${done ? "bg-black" : "bg-gray-300"}`} />
+  );
 }

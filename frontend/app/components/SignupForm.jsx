@@ -42,12 +42,10 @@ export default function SignupForm() {
 
     try {
       setLoading(true);
-
       await axios.post(
         `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/send-otp`,
         formData
       );
-
       setStep("otp");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send OTP");
@@ -59,12 +57,10 @@ export default function SignupForm() {
   /* ================= VERIFY OTP ================= */
   const handleVerifyOtp = async () => {
     setError("");
-
     if (!otp) return setError("Enter OTP");
 
     try {
       setLoading(true);
-
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/verify-otp`,
         {
@@ -75,7 +71,6 @@ export default function SignupForm() {
 
       localStorage.setItem("token", res.data.token);
 
-      // Sync cart with database after signup
       if (cart.length > 0) {
         await syncCartWithDB(cart);
       } else {
@@ -91,13 +86,12 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2] px-4">
       <form
         onSubmit={handleSignup}
-        className={`bg-white text-gray-600 w-full max-w-[350px] p-6 rounded-xl
-        shadow-[0px_0px_10px_0px] shadow-black/10 transition-all duration-300`}
+        className="w-full max-w-[360px] bg-white border border-gray-200 px-6 py-8"
       >
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
+        <h2 className="text-2xl font-semibold text-black text-center mb-6">
           {step === "signup" ? "Create Account" : "Verify OTP"}
         </h2>
 
@@ -114,7 +108,7 @@ export default function SignupForm() {
               placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border my-3 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
             />
 
             <input
@@ -123,7 +117,7 @@ export default function SignupForm() {
               placeholder="Email address"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border my-3 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
             />
 
             <input
@@ -132,7 +126,7 @@ export default function SignupForm() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border my-3 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
             />
 
             <input
@@ -141,30 +135,29 @@ export default function SignupForm() {
               placeholder="Phone Number"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full border my-3 border-gray-400/40 outline-none rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-3 focus:outline-none focus:border-black"
             />
 
-            <div className="flex items-center gap-2 my-2 px-2">
+            {/* Seller Toggle */}
+            <label className="flex items-center gap-3 text-sm text-gray-700 mb-6 cursor-pointer">
               <input
                 type="checkbox"
-                id="seller-checkbox"
                 checked={formData.role === "seller"}
                 onChange={(e) =>
-                  setFormData({ ...formData, role: e.target.checked ? "seller" : "buyer" })
+                  setFormData({
+                    ...formData,
+                    role: e.target.checked ? "seller" : "buyer",
+                  })
                 }
-                className="w-4 h-4 cursor-pointer"
+                className="h-4 w-4 accent-black"
               />
-              <label htmlFor="seller-checkbox" className="text-sm text-gray-700 cursor-pointer">
-                I want to become a Seller
-              </label>
-            </div>
+              I want to become a Seller
+            </label>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-4 bg-gray-800 hover:bg-gray-600
-              active:scale-95 transition py-2.5 rounded-full text-white
-              disabled:opacity-50 cursor-pointer"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
             >
               {loading ? "Sending OTP..." : "Sign Up"}
             </button>
@@ -183,31 +176,28 @@ export default function SignupForm() {
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full border my-4 border-gray-800 outline-none
-              rounded-full py-2.5 px-4"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 focus:outline-none focus:border-black"
             />
 
             <button
               type="button"
               onClick={handleVerifyOtp}
               disabled={loading}
-              className="w-full bg-gray-900 hover:bg-gray-600
-              active:scale-95 cursor-pointer transition py-2.5 rounded-full text-white
-              disabled:opacity-50"
+              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50"
             >
               {loading ? "Verifying..." : "Verify OTP"}
             </button>
           </>
         )}
 
-        <p className="text-center mt-4 text-sm">
+        <p className="text-center text-sm text-gray-600 mt-6">
           Already have an account?{" "}
           <button
             type="button"
             onClick={() => router.push("/auth/login")}
-            className="text-gray-500 cursor-pointer underline"
+            className="text-black underline"
           >
-            Login Now
+            Login
           </button>
         </p>
       </form>

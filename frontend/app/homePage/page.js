@@ -34,27 +34,27 @@ function App() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/categories`);
-      const data = await response.json();
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/categories`
+      );
+      const data = await res.json();
       setCategories(data || []);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
+    } catch {
       setCategories([]);
     }
   };
 
   const fetchProducts = async () => {
     setIsLoading(true);
-
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDURL}/api/products`);
-      const data = await response.json();
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/products`
+      );
+      const data = await res.json();
       setAllProducts(data || []);
-    } catch (error) {
-      console.error("Error fetching products:", error);
+    } catch {
       setAllProducts([]);
     }
-
     setIsLoading(false);
   };
 
@@ -63,8 +63,10 @@ function App() {
 
     if (selectedCategory) {
       filtered = filtered.filter((p) => {
-        // Handle both populated (object) and non-populated (string) category_id
-        const categoryId = typeof p.category_id === 'object' ? p.category_id._id : p.category_id;
+        const categoryId =
+          typeof p.category_id === "object"
+            ? p.category_id._id
+            : p.category_id;
         return categoryId === selectedCategory;
       });
     }
@@ -81,14 +83,6 @@ function App() {
     setFilteredProducts(filtered);
   };
 
-  const handleCategorySelect = (categoryId) => {
-    setSelectedCategory(categoryId);
-  };
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
   const totalPages = Math.ceil(
     filteredProducts.length / PRODUCTS_PER_PAGE
   );
@@ -102,51 +96,58 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#f7f5f2]">
       <Navbar
         categories={categories}
-        onCategorySelect={handleCategorySelect}
-        onSearch={handleSearch}
-        onCartClick={() => { }}
+        onCategorySelect={setSelectedCategory}
+        onSearch={setSearchQuery}
+        onCartClick={() => {}}
       />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <div className="flex flex-col lg:flex-row gap-6">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex flex-col lg:flex-row gap-8">
+          
           {/* Sidebar */}
-          <div className="lg:block">
+          <aside className="lg:w-64">
             <Sidebar
               categories={categories}
               selectedCategory={selectedCategory}
-              onCategorySelect={handleCategorySelect}
+              onCategorySelect={setSelectedCategory}
             />
-          </div>
+          </aside>
 
           {/* Products */}
-          <div className="flex-1">
+          <section className="flex-1">
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
-                <Loader2 className="h-12 w-12 animate-spin text-gray-800" />
+                <Loader2 className="h-10 w-10 animate-spin text-black" />
               </div>
             ) : currentProducts.length === 0 ? (
-              <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                <p className="text-xl text-gray-600">
+              <div className="bg-white border border-gray-200 p-12 text-center">
+                <p className="text-lg font-medium text-black">
                   No products found
                 </p>
-                <p className="text-gray-500 mt-2">
-                  Try adjusting your filters or search query
+                <p className="text-sm text-gray-500 mt-2">
+                  Try adjusting your filters or search
                 </p>
               </div>
             ) : (
               <>
-                <div className="mb-4 text-gray-600">
-                  Showing {startIndex + 1}–
-                  {Math.min(
-                    endIndex,
-                    filteredProducts.length
-                  )}{" "}
-                  of {filteredProducts.length} products
+                {/* Result count */}
+                <div className="mb-6 text-sm text-gray-600">
+                  Showing{" "}
+                  <span className="text-black font-medium">
+                    {startIndex + 1}–
+                    {Math.min(endIndex, filteredProducts.length)}
+                  </span>{" "}
+                  of{" "}
+                  <span className="text-black font-medium">
+                    {filteredProducts.length}
+                  </span>{" "}
+                  products
                 </div>
 
+                {/* Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {currentProducts.map((product) => (
                     <ProductCard
@@ -156,6 +157,7 @@ function App() {
                   ))}
                 </div>
 
+                {/* Pagination */}
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
@@ -163,7 +165,7 @@ function App() {
                 />
               </>
             )}
-          </div>
+          </section>
         </div>
       </main>
 

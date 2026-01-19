@@ -2,7 +2,7 @@
 
 import { ShoppingCart, User, Search, Menu, Store } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) {
@@ -10,6 +10,11 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
   const { getTotalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -17,9 +22,10 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
   };
 
   return (
-    <nav className="bg-gray-900 shadow-md sticky top-0 z-50">
+    <nav className="sticky top-0 z-50 bg-[#f7f5f2] border-b border-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
+
           {/* Logo */}
           <div
             className="flex items-center gap-3 cursor-pointer"
@@ -28,8 +34,8 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
               router.push("/homePage");
             }}
           >
-            <Store className="h-8 w-8 text-white" />
-            <span className="text-xl font-bold text-white hidden sm:block">
+            <Store className="h-7 w-7 text-black" />
+            <span className="text-xl font-semibold text-black hidden sm:block">
               OpenBazar
             </span>
           </div>
@@ -43,16 +49,14 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full text-white pl-4 pr-10 py-2 border border-gray-500 rounded-l-lg"
+                  className="w-full bg-transparent text-black placeholder-gray-400 pl-2 pr-10 py-2 border-b border-gray-400 focus:outline-none focus:border-black"
                 />
-                <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+                <Search className="absolute right-1 top-2.5 h-4 w-4 text-gray-600" />
               </div>
 
               <select
-                onChange={(e) =>
-                  onCategorySelect(e.target.value || null)
-                }
-                className="border border-l-0 border-gray-500 text-gray-400 cursor-pointer px-3 py-2 focus:outline-none bg-gray-800"
+                onChange={(e) => onCategorySelect(e.target.value || null)}
+                className="ml-6 bg-transparent border-b border-gray-400 text-sm text-black cursor-pointer focus:outline-none"
               >
                 <option value="">All Categories</option>
                 {categories.map((category) => (
@@ -64,7 +68,7 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
 
               <button
                 type="submit"
-                className="bg-gray-800  text-gray-400 px-6 py-2 rounded-r-lg hover:bg-gray-900 cursor-pointer border border-gray-500 transition-colors"
+                className="ml-6 text-sm font-medium text-black hover:text-gray-700 transition-colors"
               >
                 Search
               </button>
@@ -72,102 +76,141 @@ export function Navbar({ categories, onCategorySelect, onSearch, onCartClick }) 
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
+
             {/* Account Dropdown */}
             <div className="hidden md:flex relative group">
-              <button className="flex items-center gap-2 px-4 py-2 text-white hover:text-gray-300 transition-colors">
+              <button className="flex items-center gap-2 text-black hover:text-gray-700 transition-colors">
                 <User className="h-5 w-5" />
                 <span className="text-sm font-medium">Account</span>
               </button>
 
               {/* Dropdown Menu */}
-              <div className="absolute right-0 top-full w-48 bg-white rounded-md shadow-lg py-1 text-gray-800 hidden group-hover:block border border-gray-200">
-                {!localStorage.getItem("token") ? (
+              <div className="absolute right-0 top-full mt-3 w-52 bg-white border border-gray-200 shadow-lg rounded-sm hidden group-hover:block">
+                {!mounted || !localStorage.getItem("token") ? (
                   <>
-                    <button onClick={() => router.push("/auth/login")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left">Login</button>
-                    <button onClick={() => router.push("/auth/signup")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left">Sign Up</button>
-                    <button onClick={() => router.push("/auth/signup")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left font-semibold text-blue-600">Sell on OpenBazar</button>
+                    <button
+                      onClick={() => router.push("/auth/login")}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={() => router.push("/auth/signup")}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                    >
+                      Sign Up
+                    </button>
+                    <button
+                      onClick={() => router.push("/auth/signup")}
+                      className="block px-4 py-2 text-sm font-semibold text-black hover:bg-gray-100 w-full text-left border-t"
+                    >
+                      Sell on OpenBazar
+                    </button>
                   </>
                 ) : (
                   <>
-                    <div className="px-4 py-2 text-xs text-gray-500 border-b mb-1">
+                    <div className="px-4 py-2 text-xs text-gray-500 border-b">
                       Hello, User
                     </div>
-                    <button onClick={() => router.push("/account/profile")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left">My Profile</button>
+
+                    <button
+                      onClick={() => router.push("/account/profile")}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                    >
+                      My Profile
+                    </button>
 
                     {localStorage.getItem("role") === "seller" && (
-                      <button onClick={() => router.push("/seller/dashboard")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left text-blue-600">Seller Dashboard</button>
+                      <button
+                        onClick={() => router.push("/seller/dashboard")}
+                        className="block px-4 py-2 text-sm text-black hover:bg-gray-100 w-full text-left"
+                      >
+                        Seller Dashboard
+                      </button>
                     )}
 
                     {localStorage.getItem("role") === "admin" && (
-                      <button onClick={() => router.push("/admin/dashboard")} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left text-red-600">Admin Panel</button>
+                      <button
+                        onClick={() => router.push("/admin/dashboard")}
+                        className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                      >
+                        Admin Panel
+                      </button>
                     )}
 
-                    <button onClick={() => {
-                      localStorage.removeItem("token");
-                      localStorage.removeItem("role");
-                      router.push("/auth/login");
-                    }} className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left text-gray-500 border-t mt-1">Logout</button>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("role");
+                        router.push("/auth/login");
+                      }}
+                      className="block px-4 py-2 text-sm text-gray-500 hover:bg-gray-100 w-full text-left border-t"
+                    >
+                      Logout
+                    </button>
                   </>
                 )}
               </div>
             </div>
 
+            {/* Cart */}
             <button
-              onClick={() => router.push('/cart')}
-              className="relative p-2 text-white cursor-pointer  hover:underline transition-colors"
+              onClick={() => {
+                onCartClick?.();
+                router.push("/cart");
+              }}
+              className="relative"
             >
-              <ShoppingCart className="h-6 w-6" />
+              <ShoppingCart className="h-6 w-6 text-black" />
               {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
                   {getTotalItems()}
                 </span>
               )}
             </button>
 
+            {/* Mobile Menu */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-gray-700"
+              className="md:hidden"
             >
-              <Menu className="h-6 w-6 text-white" />
+              <Menu className="h-6 w-6 text-black" />
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden pb-4">
-            <form onSubmit={handleSearch} className="mb-3">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-              </div>
+          <div className="md:hidden pb-4 border-t border-gray-200">
+            <form onSubmit={handleSearch} className="mb-3 mt-3">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+              />
             </form>
 
             <button
               onClick={() => router.push("/account/profile")}
-              className="flex items-center gap-2 w-full px-4 py-2 text-white hover:bg-gray-800 rounded-lg"
+              className="flex items-center gap-2 w-full px-4 py-2 text-black hover:bg-gray-100 rounded-md"
             >
               <User className="h-5 w-5" />
               <span>My Account</span>
             </button>
 
-            {localStorage.getItem("token") && (
+            {mounted && localStorage.getItem("token") && (
               <button
                 onClick={() => {
                   localStorage.removeItem("token");
                   localStorage.removeItem("role");
                   router.push("/auth/login");
                 }}
-                className="flex items-center gap-2 w-full px-4 py-2 text-red-400 hover:bg-gray-800 rounded-lg"
+                className="w-full px-4 py-2 text-left text-red-500 hover:bg-gray-100 rounded-md"
               >
-                <span>Logout</span>
+                Logout
               </button>
             )}
           </div>
