@@ -9,6 +9,8 @@ import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import thriftItemRoutes from "./routes/thriftItemRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import bannerRoutes from "./routes/bannerRoutes.js";
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -31,6 +33,7 @@ app.use("/api", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/thrift", thriftItemRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/banners", bannerRoutes);
 
 
 

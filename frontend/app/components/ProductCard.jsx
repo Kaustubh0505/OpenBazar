@@ -64,7 +64,7 @@ export function ProductCard({ product }) {
       {/* Content */}
       <div className="p-4 space-y-3">
         {/* Product Name */}
-        <h3 className="text-sm font-medium text-black leading-snug line-clamp-2 min-h-[40px]">
+        <h3 className="text-sm font-bold text-black leading-snug line-clamp-2 min-h-[40px]">
           {product.name}
         </h3>
 
@@ -87,7 +87,7 @@ export function ProductCard({ product }) {
         {/* Price & Stock */}
         <div className="flex items-center justify-between">
           <span className="text-base font-semibold text-black">
-            ${product.price.toFixed(2)}
+          ₹{product.price.toFixed(2)}
           </span>
           <span
             className={`text-xs ${product.stock > 0
@@ -115,7 +115,7 @@ export function ProductCard({ product }) {
               ? ""
               : isAdding
                 ? "bg-[#f7f5f2] text-black"
-                : "bg-[#f7f5f2] text-black hover:bg-gray-200"
+                : "bg-[#f7f5f2] text-black hover:bg-[#d2cac0]"
             }
           `}
         >

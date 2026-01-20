@@ -175,7 +175,7 @@ function Step({ label, active, done }) {
     <div className={`flex items-center ${active || done ? "text-black" : "text-gray-400"}`}>
       <span
         className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
-        ${done || active ? "bg-black text-white" : "bg-gray-200"}`}
+        ${done || active ? "bg-[#6f6451] text-white" : "bg-gray-200"}`}
       >
         {done ? "✓" : label[0]}
       </span>

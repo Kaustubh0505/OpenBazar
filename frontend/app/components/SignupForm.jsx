@@ -108,7 +108,7 @@ export default function SignupForm() {
               placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm text-[#6f6451] mb-4 focus:outline-none focus:border-black"
             />
 
             <input
@@ -117,7 +117,7 @@ export default function SignupForm() {
               placeholder="Email address"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none text-[#6f6451] focus:border-black"
             />
 
             <input
@@ -126,7 +126,7 @@ export default function SignupForm() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 text-[#6f6451] focus:outline-none focus:border-black"
             />
 
             <input
@@ -135,7 +135,7 @@ export default function SignupForm() {
               placeholder="Phone Number"
               value={formData.phone}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-3 focus:outline-none focus:border-black"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-3 text-[#6f6451] focus:outline-none focus:border-black"
             />
 
             {/* Seller Toggle */}

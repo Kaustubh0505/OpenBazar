@@ -110,7 +110,7 @@ export default function CheckoutAddress() {
               </p>
               <button
                 onClick={() => router.push("/account/profile")}
-                className="bg-black text-white px-6 py-2 cursor-pointer"
+                className="bg-[#6f6451] text-white px-6 py-2 cursor-pointer"
               >
                 <Plus className="inline w-4 h-4 mr-2" />
                 Add Address
@@ -166,7 +166,7 @@ export default function CheckoutAddress() {
             <button
               onClick={handleContinue}
               disabled={!selectedAddress}
-              className="bg-black text-white px-8 py-3 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="bg-[#867964] text-white px-8 py-3 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               Continue <ArrowRight className="h-4 w-4" />
             </button>
@@ -196,7 +196,7 @@ function Step({ label, active }) {
     <div className={`flex items-center ${active ? "text-black" : "text-gray-400"}`}>
       <span
         className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
-        ${active ? "bg-black text-white" : "bg-gray-200"}`}
+        ${active ? "bg-[#6f6451] text-white" : "bg-gray-200"}`}
       >
         {label[0]}
       </span>

@@ -227,7 +227,7 @@ export default function SellItemPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
+                className="flex-1 bg-[#867964] text-white py-3 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

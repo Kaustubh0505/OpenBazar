@@ -29,7 +29,7 @@ export default function CartPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-[#f7f5f2] flex flex-col">
             <Navbar
                 categories={[]}
                 onCategorySelect={() => router.push("/homePage")}
@@ -77,7 +77,7 @@ export default function CartPage() {
                         </p>
                         <button
                             onClick={() => router.push("/homePage")}
-                            className="bg-gray-800 text-white px-6 py-3 cursor-pointer  rounded-lg font-semibold hover:bg-gray-600"
+                            className="bg-[#6f6451] text-white px-6 py-3 cursor-pointer  rounded-lg font-semibold hover:bg-[#998a70]"
                         >
                             Start Shopping
                         </button>
@@ -121,10 +121,10 @@ export default function CartPage() {
                                                 {/* Price */}
                                                 <div>
                                                     <p className="text-xl font-bold">
-                                                        ${item.price.toFixed(2)}
+                                                    ₹{item.price.toFixed(2)}
                                                     </p>
                                                     <p className="text-sm text-gray-500">
-                                                        ${(item.price * item.quantity).toFixed(2)} total
+                                                    ₹{(item.price * item.quantity).toFixed(2)} total
                                                     </p>
                                                 </div>
 
@@ -137,7 +137,7 @@ export default function CartPage() {
                                                                 item.quantity - 1
                                                             )
                                                         }
-                                                        className="w-8 h-8 bg-gray-700 text-white rounded cursor-pointer"
+                                                        className="w-8 h-8 bg-[#6f6451] text-white rounded cursor-pointer"
                                                     >
                                                         <Minus className="h-4 w-4 mx-auto" />
                                                     </button>
@@ -153,7 +153,7 @@ export default function CartPage() {
                                                                 item.quantity + 1
                                                             )
                                                         }
-                                                        className="w-8 h-8 bg-gray-700 text-white rounded cursor-pointer"
+                                                        className="w-8 h-8 bg-[#6f6451] text-white rounded cursor-pointer"
                                                     >
                                                         <Plus className="h-4 w-4 mx-auto" />
                                                     </button>
@@ -185,7 +185,7 @@ export default function CartPage() {
                                 <div className="space-y-3">
                                     <div className="flex justify-between">
                                         <span>Subtotal</span>
-                                        <span>${getTotalPrice().toFixed(2)}</span>
+                                        <span>₹{getTotalPrice().toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Shipping</span>
@@ -193,7 +193,7 @@ export default function CartPage() {
                                     </div>
                                     <div className="border-t pt-3 flex justify-between font-bold">
                                         <span>Total</span>
-                                        <span>${getTotalPrice().toFixed(2)}</span>
+                                        <span>₹{getTotalPrice().toFixed(2)}</span>
                                     </div>
                                 </div>
 
@@ -206,14 +206,14 @@ export default function CartPage() {
                                             router.push("/auth/login?redirect=/checkout/address");
                                         }
                                     }}
-                                    className="w-full cursor-pointer bg-gray-800 text-white py-3 rounded-lg mt-6 hover:bg-gray-700 transition"
+                                    className="w-full cursor-pointer bg-[#6f6451] text-white py-3 rounded-lg mt-6 hover:bg-[#8c8275] transition"
                                 >
                                     Proceed to Checkout
                                 </button>
 
                                 <button
                                     onClick={clearCart}
-                                    className="w-full cursor-pointer border mt-3 py-2 rounded-lg"
+                                    className="w-full cursor-pointer border mt-3 py-2 hover:bg-[#f7f5f2] rounded-lg"
                                 >
                                     Clear Cart
                                 </button>

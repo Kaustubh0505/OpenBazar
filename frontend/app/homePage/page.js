@@ -6,6 +6,8 @@ import { Footer } from "../components/Footer";
 import { Sidebar } from "../components/Sidebar";
 import { ProductCard } from "../components/ProductCard";
 import { Pagination } from "../components/Pagination";
+import { HeroSlider } from "../components/HeroSlider";
+import { OurPolicy } from "../components/OurPolicy";
 import { Loader2 } from "lucide-react";
 
 const PRODUCTS_PER_PAGE = 12;
@@ -101,12 +103,16 @@ function App() {
         categories={categories}
         onCategorySelect={setSelectedCategory}
         onSearch={setSearchQuery}
-        onCartClick={() => {}}
+        onCartClick={() => { }}
       />
+
+      <div className="w-full">
+        <HeroSlider />
+      </div>
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-col lg:flex-row gap-8">
-          
+
           {/* Sidebar */}
           <aside className="lg:w-64">
             <Sidebar
@@ -169,6 +175,7 @@ function App() {
         </div>
       </main>
 
+      <OurPolicy />
       <Footer />
     </div>
   );

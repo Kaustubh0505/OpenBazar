@@ -180,7 +180,7 @@ export default function LoginForm() {
               placeholder="Email or Phone"
               value={formData.identifier}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
+              className="w-full text-[#6f6451] border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none focus:border-black"
             />
 
             <input
@@ -189,7 +189,7 @@ export default function LoginForm() {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-3 focus:outline-none focus:border-black"
+              className="w-full border border-gray-300  px-4 py-2.5 text-sm mb-3 focus:outline-none text-[#6f6451] focus:border-black"
             />
 
             <div className="text-right mb-5">
@@ -220,7 +220,7 @@ export default function LoginForm() {
               placeholder="Enter your email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 focus:outline-none focus:border-black"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 text-[#6f6451] focus:outline-none focus:border-black"
             />
 
             <button
@@ -241,7 +241,7 @@ export default function LoginForm() {
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 focus:outline-none focus:border-black"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 text-[#6f6451] focus:outline-none focus:border-black"
             />
 
             <button

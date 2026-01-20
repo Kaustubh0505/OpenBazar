@@ -29,8 +29,8 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
             className={`
               w-full text-left px-4 py-2 text-sm transition cursor-pointer
               ${selectedCategory === null
-                ? "bg-black text-white"
-                : "text-gray-700 hover:bg-gray-100"
+                ? "bg-[#6f6451] text-white"
+                : "text-gray-700 hover:bg-[#d2cac0]"
               }
             `}
           >
@@ -43,10 +43,10 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
             <button
               onClick={() => onCategorySelect(category._id)}
               className={`
-                w-full text-left px-4 py-2 text-sm transition cursor-pointer
+                w-full text-left px-4 py-2 text-sm transition font-semibold cursor-pointer
                 ${selectedCategory === category._id
-                  ? "bg-black text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+                  ? "bg-[#6f6451] text-white"
+                  : "text-gray-700 hover:bg-[#d2cac0]"
                 }
               `}
             >
@@ -62,7 +62,7 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
           Thrift Marketplace
         </h3>
 
-        <ul className="space-y-1">
+        <ul className="space-y-1 font-semibold ">
           <li>
             <button
               onClick={() => router.push("/sell-item")}
@@ -70,7 +70,7 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
                 w-full flex items-center gap-3
                 px-4 py-2 text-sm
                 text-gray-700
-                hover:bg-gray-100
+                hover:bg-[#d2cac0]
                 transition
                 cursor-pointer
               "
@@ -87,7 +87,7 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
                 w-full flex items-center gap-3
                 px-4 py-2 text-sm
                 text-gray-700
-                hover:bg-gray-100
+                hover:bg-[#d2cac0]
                 transition
                 cursor-pointer
               "

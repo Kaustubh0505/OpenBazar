@@ -170,7 +170,7 @@ export default function CheckoutReview() {
 
               <button
                 onClick={() => router.push("/checkout/payment")}
-                className="w-full bg-black text-white py-3 mt-6 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full bg-[#867964] text-white py-3 mt-6 flex items-center justify-center gap-2 cursor-pointer"
               >
                 Continue to Payment <ArrowRight className="h-4 w-4" />
               </button>
@@ -201,7 +201,7 @@ function Step({ label, active, done }) {
     <div className={`flex items-center ${active || done ? "text-black" : "text-gray-400"}`}>
       <span
         className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
-        ${done || active ? "bg-black text-white" : "bg-gray-200"}`}
+        ${done || active ? "bg-[#867964] text-white" : "bg-gray-200"}`}
       >
         {done ? "✓" : label[0]}
       </span>
@@ -212,6 +212,6 @@ function Step({ label, active, done }) {
 
 function Line({ done }) {
   return (
-    <div className={`flex-1 h-px mx-4 ${done ? "bg-black" : "bg-gray-300"}`} />
+    <div className={`flex-1 h-px mx-4 ${done ? "bg-[#867964]" : "bg-gray-300"}`} />
   );
 }

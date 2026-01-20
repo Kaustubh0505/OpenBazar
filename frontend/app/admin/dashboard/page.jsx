@@ -74,6 +74,15 @@ export default function AdminDashboard() {
                         <p className="text-4xl font-bold text-gray-800 mt-4">{stats.orders}</p>
                         <p className="text-blue-500 mt-2 text-sm font-medium">Manage Orders &rarr;</p>
                     </div>
+
+                    <div
+                        onClick={() => router.push("/admin/banners")}
+                        className="bg-white p-8 rounded-xl shadow-sm cursor-pointer hover:shadow-md transition"
+                    >
+                        <h3 className="text-purple-500 font-medium">Store Banners</h3>
+                        <p className="text-4xl font-bold text-gray-800 mt-4">Edit</p>
+                        <p className="text-blue-500 mt-2 text-sm font-medium">Manage Banners &rarr;</p>
+                    </div>
                 </div>
             </div>
         </div>

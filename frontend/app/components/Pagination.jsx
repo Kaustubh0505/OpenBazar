@@ -63,7 +63,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }) {
             transition
             cursor-pointer
             ${page === currentPage
-              ? "bg-black text-white"
+              ? "bg-[#867964] text-white"
               : page === "..."
                 ? "text-gray-400 cursor-default"
                 : "border border-gray-300 text-black hover:border-black"
