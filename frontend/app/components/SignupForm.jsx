@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
+import { motion } from "framer-motion";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -86,121 +87,161 @@ export default function SignupForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2] px-4">
-      <form
-        onSubmit={handleSignup}
-        className="w-full max-w-[360px] bg-white border border-gray-200 px-6 py-8"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="min-h-screen flex items-center justify-center bg-[#f7f5f2] px-4"
+    >
+      <motion.div
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+        className="w-full max-w-5xl bg-white rounded-2xl shadow-md overflow-hidden grid grid-cols-1 md:grid-cols-2"
       >
-        <h2 className="text-2xl font-semibold text-black text-center mb-6">
-          {step === "signup" ? "Create Account" : "Verify OTP"}
-        </h2>
 
-        {error && (
-          <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
-        )}
+        {/* ================= LEFT : FORM ================= */}
+        <div className="px-8 py-10 flex flex-col justify-center">
+          <h2 className="text-3xl font-semibold text-[#2f2a24] mb-2">
+            {step === "signup" ? "Create your account" : "Verify OTP"}
+          </h2>
 
-        {/* ================= SIGNUP STEP ================= */}
-        {step === "signup" && (
-          <>
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm text-[#6f6451] mb-4 focus:outline-none focus:border-black"
-            />
+          <p className="text-sm text-[#7a6f5b] mb-8">
+            Buy & sell effortlessly on <b>OpenBazar</b>
+          </p>
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email address"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 focus:outline-none text-[#6f6451] focus:border-black"
-            />
+          {error && (
+            <p className="text-red-500 text-sm mb-4">{error}</p>
+          )}
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-4 text-[#6f6451] focus:outline-none focus:border-black"
-            />
-
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-3 text-[#6f6451] focus:outline-none focus:border-black"
-            />
-
-            {/* Seller Toggle */}
-            <label className="flex items-center gap-3 text-sm text-gray-700 mb-6 cursor-pointer">
+          {/* ================= SIGNUP STEP ================= */}
+          {step === "signup" && (
+            <form onSubmit={handleSignup} className="space-y-4">
               <input
-                type="checkbox"
-                checked={formData.role === "seller"}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    role: e.target.checked ? "seller" : "buyer",
-                  })
-                }
-                className="h-4 w-4 accent-black"
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full border border-[#e4ded4] rounded-full px-5 py-3 text-sm text-[#867964] focus:outline-none focus:border-[#8b7a5e]"
               />
-              I want to become a Seller
-            </label>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
-            >
-              {loading ? "Sending OTP..." : "Sign Up"}
-            </button>
-          </>
-        )}
+              <input
+                type="email"
+                name="email"
+                placeholder="Email address"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border border-[#e4ded4] rounded-full px-5 py-3 text-sm text-[#867964] focus:outline-none focus:border-[#8b7a5e]"
+              />
 
-        {/* ================= OTP STEP ================= */}
-        {step === "otp" && (
-          <>
-            <p className="text-sm text-center text-gray-600 mb-4">
-              OTP sent to <b>{formData.email}</b>
-            </p>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full border border-[#e4ded4] rounded-full px-5 py-3 text-sm text-[#867964] focus:outline-none focus:border-[#8b7a5e]"
+              />
 
-            <input
-              type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm mb-5 focus:outline-none focus:border-black"
-            />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full border border-[#e4ded4] rounded-full px-5 py-3 text-sm text-[#867964] focus:outline-none focus:border-[#8b7a5e]"
+              />
 
+              {/* Seller Toggle */}
+              <label className="flex items-center gap-3 text-sm text-[#5f5646] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.role === "seller"}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      role: e.target.checked ? "seller" : "buyer",
+                    })
+                  }
+                  className="h-4 w-4 accent-[#8b7a5e]"
+                />
+                I want to sell products on OpenBazar
+              </label>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full mt-4 bg-[#7a6a50] hover:bg-[#8b7a5e] text-white rounded-full py-3 text-sm font-medium transition disabled:opacity-50"
+              >
+                {loading ? "Sending OTP..." : "Create Account"}
+              </button>
+            </form>
+          )}
+
+          {/* ================= OTP STEP ================= */}
+          {step === "otp" && (
+            <div className="space-y-5">
+              <p className="text-sm text-[#6f6451]">
+                OTP sent to <b>{formData.email}</b>
+              </p>
+
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="w-full border border-[#e4ded4] rounded-full px-5 py-3 text-sm focus:outline-none focus:border-[#8b7a5e]"
+              />
+
+              <button
+                type="button"
+                onClick={handleVerifyOtp}
+                disabled={loading}
+                className="w-full bg-[#8b7a5e] hover:bg-[#7a6a50] text-white rounded-full py-3 text-sm font-medium transition disabled:opacity-50"
+              >
+                {loading ? "Verifying..." : "Verify OTP"}
+              </button>
+            </div>
+          )}
+
+          <p className="text-sm text-center text-[#6f6451] mt-8">
+            Already have an account?{" "}
             <button
               type="button"
-              onClick={handleVerifyOtp}
-              disabled={loading}
-              className="w-full bg-black text-white py-2.5 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
+              onClick={() => router.push("/auth/login")}
+              className="text-[#8b7a5e] underline"
             >
-              {loading ? "Verifying..." : "Verify OTP"}
+              Login
             </button>
-          </>
-        )}
+          </p>
+        </div>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account?{" "}
-          <button
-            type="button"
-            onClick={() => router.push("/auth/login")}
-            className="text-black underline cursor-pointer"
-          >
-            Login
-          </button>
-        </p>
-      </form>
-    </div>
+        {/* ================= RIGHT : BRAND PANEL ================= */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="hidden md:flex bg-[#f3efe8] items-center justify-center px-10"
+        >
+          <div className="text-center max-w-sm">
+            <h2 className="text-3xl font-bold text-[#2f2a24] mb-6">
+              Welcome to OpenBazar
+            </h2>
+
+            <h3 className="text-xl font-semibold text-[#2f2a24] mb-4">
+              Buy & Sell with Confidence
+            </h3>
+
+            <p className="text-sm text-[#6f6451]">
+              OpenBazar combines the best of online marketplaces and local
+              listings. Discover amazing deals or sell items you no longer
+              need — all in one trusted platform.
+            </p>
+          </div>
+        </motion.div>
+
+      </motion.div>
+    </motion.div>
   );
 }

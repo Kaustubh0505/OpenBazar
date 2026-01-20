@@ -1,5 +1,6 @@
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
+import ThriftItem from "../models/ThriftItem.js";
 
 // Get user's cart
 export const getCart = async (req, res) => {
@@ -38,7 +39,12 @@ export const addToCart = async (req, res) => {
             });
         }
 
-        const product = await Product.findById(productId);
+        let product = await Product.findById(productId);
+        if (!product) {
+            // Try looking up ThriftItem if not found in Products
+            product = await ThriftItem.findById(productId);
+        }
+
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -69,7 +75,7 @@ export const addToCart = async (req, res) => {
                             quantity,
                             price: product.price,
                             name: product.name,
-                            image: product.image,
+                            image: product.image_url,
                         },
                     },
                 },
@@ -249,14 +255,18 @@ export const syncCart = async (req, res) => {
                 cart.items[existingItemIndex].quantity += localItem.quantity;
             } else {
                 // Add new item
-                const product = await Product.findById(localItem._id);
+                let product = await Product.findById(localItem._id);
+                if (!product) {
+                    product = await ThriftItem.findById(localItem._id);
+                }
+
                 if (product) {
                     cart.items.push({
                         product: localItem._id,
                         quantity: localItem.quantity,
                         price: product.price,
                         name: product.name,
-                        image: product.image,
+                        image: product.image_url,
                     });
                 }
             }

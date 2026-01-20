@@ -42,10 +42,10 @@ export function CartProvider({ children }) {
         const data = await response.json();
         // Transform cart items from DB format to local format
         const cartItems = data.cart.items.map((item) => ({
-          _id: item.product._id || item.product,
+          _id: item.product?._id || item.product,
           name: item.name,
           price: item.price,
-          image: item.product.image_url,
+          image: item.product?.image_url || item.image,
           quantity: item.quantity,
         }));
         setCart(cartItems);

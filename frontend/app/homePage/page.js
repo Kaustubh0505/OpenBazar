@@ -9,6 +9,7 @@ import { Pagination } from "../components/Pagination";
 import { HeroSlider } from "../components/HeroSlider";
 import { OurPolicy } from "../components/OurPolicy";
 import { Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const PRODUCTS_PER_PAGE = 12;
 
@@ -98,32 +99,59 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f7f5f2]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="min-h-screen flex flex-col bg-[#f7f5f2]"
+    >
       <Navbar
         categories={categories}
         onCategorySelect={setSelectedCategory}
         onSearch={setSearchQuery}
-        onCartClick={() => { }}
+        onCartClick={() => {}}
       />
 
-      <div className="w-full">
+      {/* Hero Section */}
+      <motion.div
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="w-full"
+      >
         <HeroSlider />
-      </div>
+      </motion.div>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
+      {/* Main Content */}
+      <motion.main
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10"
+      >
         <div className="flex flex-col lg:flex-row gap-8">
 
           {/* Sidebar */}
-          <aside className="lg:w-64">
+          <motion.aside
+            initial={{ x: -30, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="lg:w-64"
+          >
             <Sidebar
               categories={categories}
               selectedCategory={selectedCategory}
               onCategorySelect={setSelectedCategory}
             />
-          </aside>
+          </motion.aside>
 
           {/* Products */}
-          <section className="flex-1">
+          <motion.section
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex-1"
+          >
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
                 <Loader2 className="h-10 w-10 animate-spin text-black" />
@@ -155,11 +183,18 @@ function App() {
 
                 {/* Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {currentProducts.map((product) => (
-                    <ProductCard
+                  {currentProducts.map((product, index) => (
+                    <motion.div
                       key={product._id}
-                      product={product}
-                    />
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 0.05 * index,
+                      }}
+                    >
+                      <ProductCard product={product} />
+                    </motion.div>
                   ))}
                 </div>
 
@@ -171,13 +206,13 @@ function App() {
                 />
               </>
             )}
-          </section>
+          </motion.section>
         </div>
-      </main>
+      </motion.main>
 
       <OurPolicy />
       <Footer />
-    </div>
+    </motion.div>
   );
 }
 

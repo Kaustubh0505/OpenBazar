@@ -126,13 +126,13 @@ export default function SellerDashboard() {
       <div className="max-w-6xl mx-auto p-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-light text-black">
+          <h1 className="text-3xl font-semibold text-black">
             Dashboard
           </h1>
 
           <button
             onClick={() => router.push("/seller/add-product")}
-            className="flex items-center gap-2 bg-black text-white px-6 py-2 hover:bg-gray-800 transition cursor-pointer rounded-md"
+            className="flex items-center gap-2 bg-[#6e5f47] text-white px-6 py-2 hover:bg-[#938772] transition cursor-pointer rounded-md"
           >
             <Plus className="h-4 w-4" />
             Add Product

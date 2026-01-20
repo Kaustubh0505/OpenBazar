@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Edit2, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -12,7 +13,6 @@ export default function ProfilePage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-  // Form State
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -21,7 +21,7 @@ export default function ProfilePage() {
     state: "",
     pincode: "",
     country: "India",
-    isDefault: false
+    isDefault: false,
   });
 
   useEffect(() => {
@@ -38,8 +38,8 @@ export default function ProfilePage() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setUser(res.data);
-    } catch (error) {
-      console.error("Error fetching profile:", error);
+    } catch (err) {
+      console.error("Error fetching profile:", err);
     } finally {
       setLoading(false);
     }
@@ -47,9 +47,9 @@ export default function ProfilePage() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -73,8 +73,7 @@ export default function ProfilePage() {
         );
       }
 
-      // Update local user addresses
-      setUser(prev => ({ ...prev, addresses: res.data.addresses }));
+      setUser((prev) => ({ ...prev, addresses: res.data.addresses }));
       resetForm();
     } catch (error) {
       alert(error.response?.data?.message || "Error saving address");
@@ -89,23 +88,14 @@ export default function ProfilePage() {
         `${process.env.NEXT_PUBLIC_BACKENDURL}/api/user/address/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setUser(prev => ({ ...prev, addresses: res.data.addresses }));
-    } catch (error) {
+      setUser((prev) => ({ ...prev, addresses: res.data.addresses }));
+    } catch {
       alert("Error deleting address");
     }
   };
 
   const handleEdit = (addr) => {
-    setFormData({
-      fullName: addr.fullName,
-      phone: addr.phone,
-      street: addr.street,
-      city: addr.city,
-      state: addr.state,
-      pincode: addr.pincode,
-      country: addr.country,
-      isDefault: addr.isDefault
-    });
+    setFormData({ ...addr });
     setEditingId(addr._id);
     setShowForm(true);
   };
@@ -119,103 +109,141 @@ export default function ProfilePage() {
       state: "",
       pincode: "",
       country: "India",
-      isDefault: false
+      isDefault: false,
     });
     setEditingId(null);
     setShowForm(false);
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f7f5f2] flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          Loading...
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="min-h-screen bg-[#f7f5f2] py-10 px-4"
+    >
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
+
+        {/* HEADER */}
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="flex items-center gap-4 mb-8"
+        >
           <button
             onClick={() => router.push("/homePage")}
-            className="text-gray-500 hover:text-black cursor-pointer"
+            className="text-[#6f6451] hover:underline cursor-pointer"
           >
-            &larr; Back to Home
+            ← Back to Home
           </button>
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1 className="text-3xl font-light text-gray-900">
             My Profile
           </h1>
-        </div>
+        </motion.div>
 
-        {/* PROFILE INFO */}
-        <div className="bg-white p-6 rounded-xl shadow-sm mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">
+        {/* ACCOUNT DETAILS */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white border border-[#e6e1d8] p-6 mb-8"
+        >
+          <h2 className="text-xl font-medium text-gray-900 mb-4">
             Account Details
           </h2>
 
-          {loading ? (
-            <div className="animate-pulse space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-1/2" />
-              <div className="h-4 bg-gray-200 rounded w-1/3" />
-              <div className="h-4 bg-gray-200 rounded w-1/4" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm text-[#8c8275]">Full Name</label>
+              <p className="font-medium text-gray-900">{user?.name}</p>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm text-gray-500">Full Name</label>
-                <p className="font-medium text-gray-800">{user?.name}</p>
-              </div>
-              <div>
-                <label className="text-sm text-gray-500">Email</label>
-                <p className="font-medium text-gray-800">{user?.email}</p>
-              </div>
-              <div>
-                <label className="text-sm text-gray-500">Phone</label>
-                <p className="font-medium text-gray-800">{user?.phone}</p>
-              </div>
+            <div>
+              <label className="text-sm text-[#8c8275]">Email</label>
+              <p className="font-medium text-gray-900">{user?.email}</p>
             </div>
-          )}
-        </div>
+            <div>
+              <label className="text-sm text-[#8c8275]">Phone</label>
+              <p className="font-medium text-gray-900">{user?.phone}</p>
+            </div>
+          </div>
+        </motion.div>
 
         {/* ADDRESSES */}
-        <div className="bg-white p-6 rounded-xl shadow-sm">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white border border-[#e6e1d8] p-6"
+        >
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-700">
+            <h2 className="text-xl font-medium text-gray-900">
               Saved Addresses
             </h2>
 
             <button
-              onClick={() => { resetForm(); setShowForm(true); }}
-              className="bg-gray-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm hover:bg-gray-700 transition cursor-pointer"
+              onClick={() => {
+                resetForm();
+                setShowForm(true);
+              }}
+              className="bg-[#6f6451] text-white px-4 py-2 flex items-center gap-2 text-sm hover:bg-[#8c8275] transition cursor-pointer"
             >
-              <Plus className="w-4 h-4" /> Add New Address
+              <Plus className="w-4 h-4" />
+              Add New Address
             </button>
           </div>
 
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[1, 2].map(i => (
-                <div key={i} className="border rounded-lg p-4 animate-pulse">
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                  <div className="h-3 bg-gray-200 rounded w-full mb-1" />
-                  <div className="h-3 bg-gray-200 rounded w-2/3" />
-                </div>
-              ))}
-            </div>
+          {user?.addresses?.length === 0 ? (
+            <p className="text-[#6f6451] text-center py-8">
+              No addresses saved yet.
+            </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {user?.addresses?.length === 0 ? (
-                <p className="text-gray-500 col-span-2 text-center py-8">
-                  No addresses saved yet.
-                </p>
-              ) : (
-                user.addresses.map(addr => (
-                  <div key={addr._id} className="border rounded-lg p-4">
-                    <h4 className="font-bold text-gray-800">{addr.fullName}</h4>
-                    <p className="text-sm text-gray-600">{addr.street}</p>
+              {user.addresses.map((addr) => (
+                <motion.div
+                  key={addr._id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="border border-[#e6e1d8] p-4"
+                >
+                  <h4 className="font-medium text-gray-900">
+                    {addr.fullName}
+                  </h4>
+                  <p className="text-sm text-[#6f6451]">{addr.street}</p>
+
+                  <div className="flex gap-3 mt-4">
+                    <button
+                      onClick={() => handleEdit(addr)}
+                      className="text-[#6f6451] hover:underline text-sm cursor-pointer flex items-center gap-1"
+                    >
+                      <Edit2 className="h-4 w-4" /> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(addr._id)}
+                      className="text-red-600 hover:underline text-sm cursor-pointer flex items-center gap-1"
+                    >
+                      <Trash2 className="h-4 w-4" /> Delete
+                    </button>
                   </div>
-                ))
-              )}
+                </motion.div>
+              ))}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
-
 }

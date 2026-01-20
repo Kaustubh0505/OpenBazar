@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Plus, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function CheckoutAddress() {
   const router = useRouter();
@@ -26,7 +27,6 @@ export default function CheckoutAddress() {
         return;
       }
 
-      // Optional safety: checkout only for buyers
       if (role && role !== "buyer") {
         router.push("/homePage");
         return;
@@ -45,7 +45,6 @@ export default function CheckoutAddress() {
 
       if (defaultAddr) setSelectedAddress(defaultAddr._id);
     } catch (err) {
-      console.error("Error fetching addresses:", err);
       setError("Failed to load addresses");
     } finally {
       setLoading(false);
@@ -70,30 +69,47 @@ export default function CheckoutAddress() {
     router.push("/checkout/review");
   };
 
+  /* ---------------- LOADING ---------------- */
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2]">
-        <Loader2 className="h-10 w-10 animate-spin text-black" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#6f6451]" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f5f2] py-12 px-4">
-      <div className="max-w-3xl mx-auto">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="min-h-screen bg-[#f7f5f2] py-12 px-4"
+    >
+      <motion.div
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="max-w-3xl mx-auto"
+      >
         {/* Progress */}
         <CheckoutSteps />
 
-        <div className="mb-6">
+        {/* Back */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-6"
+        >
           <button
             onClick={() => router.push("/cart")}
-            className="text-gray-500 hover:text-black flex items-center gap-2 cursor-pointer"
+            className="text-[#6f6451] hover:underline flex items-center gap-2 cursor-pointer"
           >
-            &larr; Back to Cart
+            ← Back to Cart
           </button>
-        </div>
+        </motion.div>
 
-        <h1 className="text-2xl font-light text-black mb-6">
+        <h1 className="text-2xl font-light text-gray-900 mb-6">
           Select Delivery Address
         </h1>
 
@@ -104,61 +120,75 @@ export default function CheckoutAddress() {
         {/* Address List */}
         <div className="grid gap-4 mb-8">
           {user.addresses.length === 0 ? (
-            <div className="bg-white border border-gray-200 p-8 text-center">
-              <p className="text-gray-600 mb-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="bg-white border border-gray-200 p-8 text-center"
+            >
+              <p className="text-[#6f6451] mb-4">
                 No saved addresses found
               </p>
               <button
                 onClick={() => router.push("/account/profile")}
-                className="bg-[#6f6451] text-white px-6 py-2 cursor-pointer"
+                className="bg-[#6f6451] text-white px-6 py-2 rounded cursor-pointer hover:bg-[#8c8275]"
               >
                 <Plus className="inline w-4 h-4 mr-2" />
                 Add Address
               </button>
-            </div>
+            </motion.div>
           ) : (
-            user.addresses.map((addr) => (
-              <div
+            user.addresses.map((addr, index) => (
+              <motion.div
                 key={addr._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
                 onClick={() => setSelectedAddress(addr._id)}
                 className={`
                   border p-5 cursor-pointer transition relative bg-white
-                  ${selectedAddress === addr._id
-                    ? "border-black"
-                    : "border-gray-200 hover:border-gray-300"
+                  ${
+                    selectedAddress === addr._id
+                      ? "border-[#6f6451]"
+                      : "border-gray-200 hover:border-[#8c8275]"
                   }
                 `}
               >
                 {selectedAddress === addr._id && (
-                  <CheckCircle className="absolute top-4 right-4 text-black h-5 w-5" />
+                  <CheckCircle className="absolute top-4 right-4 text-[#6f6451] h-5 w-5" />
                 )}
 
-                <p className="font-medium text-black">
+                <p className="text-lg font-bold text-gray-900">
                   {addr.fullName}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#6f6451]">
                   {addr.street}, {addr.city}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#6f6451]">
                   {addr.state} - {addr.pincode}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#6f6451]">
                   {addr.country}
                 </p>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-[#8c8275] mt-2">
                   Phone: {addr.phone}
                 </p>
-              </div>
+              </motion.div>
             ))
           )}
         </div>
 
         {/* Footer CTA */}
         {user.addresses.length > 0 && (
-          <div className="flex justify-between items-center bg-white border border-gray-200 p-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex justify-between items-center bg-white border border-gray-200 p-4"
+          >
             <button
               onClick={() => router.push("/account/profile")}
-              className="text-sm text-gray-600 underline cursor-pointer"
+              className="text-sm text-[#6f6451] underline cursor-pointer"
             >
               Manage Addresses
             </button>
@@ -166,14 +196,14 @@ export default function CheckoutAddress() {
             <button
               onClick={handleContinue}
               disabled={!selectedAddress}
-              className="bg-[#867964] text-white px-8 py-3 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="bg-[#605441] text-white px-8 py-3 flex items-center gap-2 hover:bg-[#736958] cursor-pointer disabled:opacity-50"
             >
               Continue <ArrowRight className="h-4 w-4" />
             </button>
-          </div>
+          </motion.div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -181,7 +211,7 @@ export default function CheckoutAddress() {
 
 function CheckoutSteps() {
   return (
-    <div className="flex items-center justify-between mb-10 text-sm">
+    <div className="flex items-center justify-between mb-10 text-sm font-semibold">
       <Step active label="Address" />
       <Line />
       <Step label="Review" />
@@ -193,10 +223,18 @@ function CheckoutSteps() {
 
 function Step({ label, active }) {
   return (
-    <div className={`flex items-center ${active ? "text-black" : "text-gray-400"}`}>
+    <div
+      className={`flex items-center ${
+        active ? "text-gray-900" : "text-[#8c8275]"
+      }`}
+    >
       <span
         className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
-        ${active ? "bg-[#6f6451] text-white" : "bg-gray-200"}`}
+        ${
+          active
+            ? "bg-[#6f6451] text-white"
+            : "bg-[#e6e1d8] text-[#6f6451]"
+        }`}
       >
         {label[0]}
       </span>
@@ -206,5 +244,5 @@ function Step({ label, active }) {
 }
 
 function Line() {
-  return <div className="flex-1 h-px bg-gray-300 mx-4" />;
+  return <div className="flex-1 h-px bg-[#d8d2c6] mx-4" />;
 }

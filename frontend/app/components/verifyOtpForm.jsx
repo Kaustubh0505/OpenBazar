@@ -58,6 +58,7 @@ export default function VerifyOtpForm() {
             w-full border border-gray-300
             px-4 py-2.5 text-sm
             mb-5
+            text-[#6f6451]
             focus:outline-none focus:border-black
           "
         />
@@ -66,9 +67,9 @@ export default function VerifyOtpForm() {
           onClick={handleVerify}
           disabled={loading}
           className="
-            w-full bg-black text-white
+            w-full bg-[#6f6451] text-white
             py-2.5 text-sm font-medium
-            hover:bg-gray-800 transition
+            hover:bg-[#736958] transition
             disabled:opacity-50
             cursor-pointer
           "

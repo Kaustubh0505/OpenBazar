@@ -5,6 +5,7 @@ import { RefreshCw, CheckCircle, Headset } from "lucide-react";
 export function OurPolicy() {
     return (
         <div>
+            <div className="border-t border-gray-300 mt-20 ml-20 mr-20 text-center"></div>
             <div className="flex flex-col sm:flex-row justify-around gap-12 sm:gap-2 text-center py-20 bg-[#f7f5f2]">
                 {/* Policy 1: Exchange */}
                 <div>

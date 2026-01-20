@@ -3,13 +3,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, ShoppingBag, PackageX } from "lucide-react";
+import { useCart } from "../context/CartContext";
+
+import { Navbar } from "../components/Navbar";
 
 export default function ThriftStorePage() {
   const router = useRouter();
+  const { addToCart } = useCart();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [buyingItemId, setBuyingItemId] = useState(null);
 
   useEffect(() => {
     fetchThriftItems();
@@ -30,36 +33,6 @@ export default function ThriftStorePage() {
     }
   };
 
-  const handleBuyItem = async (itemId, sellerId) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/auth/login");
-      return;
-    }
-
-    setBuyingItemId(itemId);
-
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/thrift/${itemId}/buy`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await res.json();
-      if (!data.success) throw new Error(data.message);
-      fetchThriftItems();
-    } catch (err) {
-      setError(err.message || "Failed to purchase item");
-    } finally {
-      setBuyingItemId(null);
-    }
-  };
 
   if (loading) {
     return (
@@ -70,18 +43,17 @@ export default function ThriftStorePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f7f5f2] py-12 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen flex flex-col bg-[#f7f5f2]">
+      <Navbar
+        categories={[]}
+        onCategorySelect={() => { }}
+        onSearch={() => { }}
+        onCartClick={() => { }}
+      />
+
+      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex justify-start mb-4">
-            <button
-              onClick={() => router.push("/homePage")}
-              className="text-gray-500 hover:text-black cursor-pointer"
-            >
-              &larr; Back to Home
-            </button>
-          </div>
           <h1 className="text-4xl font-light text-black mb-3">
             Thrift Store
           </h1>
@@ -90,7 +62,7 @@ export default function ThriftStorePage() {
           </p>
           <button
             onClick={() => router.push("/sell-item")}
-            className="bg-black text-white px-6 py-3 text-sm hover:bg-gray-800 transition cursor-pointer"
+            className="bg-[#665b49] text-white px-6 py-3 text-sm hover:bg-[#736958] transition cursor-pointer"
           >
             Sell Your Item
           </button>
@@ -155,28 +127,21 @@ export default function ThriftStorePage() {
                     </p>
                   )}
 
-                  <p className="text-base font-medium text-black mb-4">
-                    ₹{item.price.toFixed(2)}
-                  </p>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-base font-medium text-black">
+                      ₹{item.price.toFixed(2)}
+                    </span>
+                  </div>
 
                   <button
-                    onClick={() =>
-                      handleBuyItem(item._id, item.seller_id?._id)
-                    }
-                    disabled={buyingItemId === item._id}
-                    className="w-full bg-black text-white py-2 text-sm hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      addToCart({ ...item, image: item.image_url });
+                    }}
+                    className="w-full bg-[#f7f5f2] text-black border border-gray-200 py-2 text-sm hover:bg-[#e5e0d8] transition cursor-pointer flex items-center justify-center gap-2"
                   >
-                    {buyingItemId === item._id ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Processing
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2">
-                        <ShoppingBag className="h-4 w-4" />
-                        Buy Now
-                      </span>
-                    )}
+                    <ShoppingBag className="h-4 w-4" />
+                    Add to Cart
                   </button>
                 </div>
               </div>

@@ -133,7 +133,7 @@ export default function AddProduct() {
             required
             value={formData.name}
             onChange={handleChange}
-            className="w-full border px-4 py-2 rounded-lg"
+            className="w-full border px-4 text-[#6f6451] py-2 rounded-lg"
           />
 
           <textarea
@@ -143,7 +143,7 @@ export default function AddProduct() {
             rows="3"
             value={formData.description}
             onChange={handleChange}
-            className="w-full border px-4 py-2 rounded-lg"
+            className="w-full border px-4 text-[#6f6451] py-2 rounded-lg"
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -154,7 +154,7 @@ export default function AddProduct() {
               required
               value={formData.price}
               onChange={handleChange}
-              className="border px-4 py-2 rounded-lg"
+              className="border px-4 text-[#6f6451] py-2 rounded-lg"
             />
             <input
               type="number"
@@ -163,7 +163,7 @@ export default function AddProduct() {
               required
               value={formData.stock}
               onChange={handleChange}
-              className="border px-4 py-2 rounded-lg"
+              className="border px-4 text-[#6f6451] py-2 rounded-lg"
             />
           </div>
 
@@ -172,7 +172,7 @@ export default function AddProduct() {
             required
             value={formData.category_id}
             onChange={handleChange}
-            className="w-full border px-4 py-2 rounded-lg"
+            className="w-full border px-4 py-2 text-[#6f6451] rounded-lg"
           >
             <option value="">Select Category</option>
             {categories.map((c) => (
@@ -192,7 +192,7 @@ export default function AddProduct() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-[#6f6451] text-white px-6 py-2 flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="bg-[#6f6451] text-white px-6 py-2 flex items-center gap-2 hover:bg-[#938772] disabled:opacity-50 cursor-pointer"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
               Add Product

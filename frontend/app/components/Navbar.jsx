@@ -5,7 +5,12 @@ import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export function Navbar({ categories = [], onCategorySelect, onSearch, onCartClick }) {
+export function Navbar({
+  categories = [],
+  onCategorySelect,
+  onSearch,
+  onCartClick,
+}) {
   const router = useRouter();
   const { getTotalItems } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,7 +73,7 @@ export function Navbar({ categories = [], onCategorySelect, onSearch, onCartClic
 
               <button
                 type="submit"
-                className="ml-6 text-sm font-medium text-black hover:text-gray-700 transition-colors cursor-pointer"
+                className="ml-6 text-sm font-medium text-black hover:text-gray-700 cursor-pointer"
               >
                 Search
               </button>
@@ -78,15 +83,26 @@ export function Navbar({ categories = [], onCategorySelect, onSearch, onCartClic
           {/* Right Actions */}
           <div className="flex items-center gap-6">
 
-            {/* Account Dropdown */}
-            <div className="hidden md:flex relative group">
-              <button className="flex items-center gap-2 text-black hover:text-gray-700 transition-colors cursor-pointer">
+            {/* ================= ACCOUNT DROPDOWN (FIXED) ================= */}
+            <div className="hidden md:block relative group">
+              <button className="flex items-center gap-2 text-black cursor-pointer">
                 <User className="h-5 w-5" />
                 <span className="text-sm font-medium">Account</span>
               </button>
 
-              {/* Dropdown Menu */}
-              <div className="absolute right-0 top-full mt-3 w-52 bg-white border border-gray-200 shadow-lg rounded-sm hidden group-hover:block">
+              {/* Hover Buffer */}
+              <div className="absolute inset-x-0 top-full h-4" />
+
+              {/* Dropdown */}
+              <div
+                className="
+                  absolute right-0 top-full mt-3 w-52
+                  bg-white border border-gray-200 shadow-lg rounded-sm
+                  opacity-0 invisible pointer-events-none
+                  group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto
+                  transition
+                "
+              >
                 {!mounted || !localStorage.getItem("token") ? (
                   <>
                     <button
@@ -103,7 +119,7 @@ export function Navbar({ categories = [], onCategorySelect, onSearch, onCartClic
                     </button>
                     <button
                       onClick={() => router.push("/auth/signup")}
-                      className="block px-4 py-2 text-sm font-semibold text-black hover:bg-gray-100 w-full text-left border-t cursor-pointer"
+                      className="block px-4 py-2 text-sm font-semibold hover:bg-gray-100 w-full text-left border-t cursor-pointer"
                     >
                       Sell on OpenBazar
                     </button>
@@ -116,7 +132,7 @@ export function Navbar({ categories = [], onCategorySelect, onSearch, onCartClic
 
                     <button
                       onClick={() => router.push("/account/profile")}
-                      className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left cursor-pointer"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-100 w-full text-left cursor-pointer"
                     >
                       My Profile
                     </button>
@@ -124,7 +140,7 @@ export function Navbar({ categories = [], onCategorySelect, onSearch, onCartClic
                     {localStorage.getItem("role") === "seller" && (
                       <button
                         onClick={() => router.push("/seller/dashboard")}
-                        className="block px-4 py-2 text-sm text-black hover:bg-gray-100 w-full text-left cursor-pointer"
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left cursor-pointer"
                       >
                         Seller Dashboard
                       </button>
@@ -195,7 +211,7 @@ export function Navbar({ categories = [], onCategorySelect, onSearch, onCartClic
 
             <button
               onClick={() => router.push("/account/profile")}
-              className="flex items-center gap-2 w-full px-4 py-2 text-black hover:bg-gray-100 rounded-md cursor-pointer"
+              className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
             >
               <User className="h-5 w-5" />
               <span>My Account</span>

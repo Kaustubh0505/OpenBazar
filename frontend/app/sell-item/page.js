@@ -130,7 +130,7 @@ export default function SellItemPage() {
 
         {/* Form */}
         <div className="bg-white border border-gray-200 p-6 md:p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 text-[#867964]">
             {/* Image */}
             <div>
               <label className="block text-sm text-gray-700 mb-2">
@@ -185,7 +185,7 @@ export default function SellItemPage() {
                 onChange={handleInputChange}
                 placeholder={field === "name" ? "Product Name" : "Price"}
                 type={field === "price" ? "number" : "text"}
-                className="w-full border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:border-black"
+                className="w-full border border-gray-300 px-4 py-2.5 text-sm text-[#867964] focus:outline-none focus:border-black"
               />
             ))}
 
@@ -195,7 +195,7 @@ export default function SellItemPage() {
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Describe the item condition and details"
-              className="w-full border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:border-black"
+              className="w-full border border-gray-300 px-4 py-2.5 text-sm text-[#867964] focus:outline-none focus:border-black"
             />
 
             <select
@@ -227,7 +227,7 @@ export default function SellItemPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-[#867964] text-white py-3 text-sm font-medium hover:bg-gray-800 transition disabled:opacity-50 cursor-pointer"
+                className="flex-1 bg-[#867964] text-white py-3 text-sm font-medium hover:bg-[#736958] transition disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

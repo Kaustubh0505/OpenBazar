@@ -44,7 +44,7 @@ export function HeroSlider() {
     if (banners.length === 0) return null;
 
     return (
-        <div className="relative w-full h-[450px]">
+        <div className="relative w-full h-[400px]">
             {/* Slides */}
             <div
                 className="w-full h-full flex transition-transform duration-500 ease-in-out"

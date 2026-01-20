@@ -10,6 +10,7 @@ import {
   ShoppingBag,
   Loader2,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function CheckoutReview() {
   const router = useRouter();
@@ -18,7 +19,6 @@ export default function CheckoutReview() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Guards
     if (cart.length === 0) {
       router.push("/homePage");
       return;
@@ -43,7 +43,7 @@ export default function CheckoutReview() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f7f5f2]">
-        <Loader2 className="h-10 w-10 animate-spin text-black" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#6f6451]" />
       </div>
     );
   }
@@ -53,70 +53,98 @@ export default function CheckoutReview() {
   const total = subtotal + shipping;
 
   return (
-    <div className="min-h-screen bg-[#f7f5f2] py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="min-h-screen bg-[#f7f5f2] py-12 px-4"
+    >
+      <motion.div
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="max-w-4xl mx-auto"
+      >
         <CheckoutSteps />
 
-        <div className="mb-6">
+        {/* Back */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-6"
+        >
           <button
             onClick={() => router.push("/checkout/address")}
-            className="text-gray-500 hover:text-black flex items-center gap-2 cursor-pointer"
+            className="text-[#6f6451] hover:underline flex items-center gap-2 cursor-pointer"
           >
-            &larr; Back to Address
+            ← Back to Address
           </button>
-        </div>
+        </motion.div>
 
-        <h1 className="text-2xl font-light text-black mb-8">
+        <h1 className="text-2xl font-light text-gray-900 mb-8">
           Review Your Order
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left */}
+          {/* LEFT */}
           <div className="lg:col-span-2 space-y-6">
             {/* Address */}
-            <div className="bg-white border border-gray-200 p-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white border border-gray-200 p-6"
+            >
               <div className="flex justify-between mb-4">
-                <h2 className="flex items-center gap-2 font-medium text-black">
+                <h2 className="flex items-center gap-2 font-medium text-gray-900">
                   <MapPin className="h-5 w-5" />
                   Shipping Address
                 </h2>
                 <button
                   onClick={() => router.push("/checkout/address")}
-                  className="text-sm underline text-gray-600 cursor-pointer"
+                  className="text-sm underline text-[#6f6451] cursor-pointer"
                 >
                   Change
                 </button>
               </div>
 
-              <p className="font-medium text-black">
+              <p className="font-medium text-gray-900">
                 {shippingAddress.fullName}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#6f6451]">
                 {shippingAddress.street}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#6f6451]">
                 {shippingAddress.city}, {shippingAddress.state} –{" "}
                 {shippingAddress.pincode}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#6f6451]">
                 {shippingAddress.country}
               </p>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-[#8c8275] mt-1">
                 Phone: {shippingAddress.phone}
               </p>
-            </div>
+            </motion.div>
 
             {/* Items */}
-            <div className="bg-white border border-gray-200 p-6">
-              <h2 className="flex items-center gap-2 font-medium text-black mb-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white border border-gray-200 p-6"
+            >
+              <h2 className="flex items-center gap-2 font-medium text-gray-900 mb-4">
                 <Package className="h-5 w-5" />
                 Items ({cart.length})
               </h2>
 
               <div className="space-y-4">
-                {cart.map((item) => (
-                  <div
+                {cart.map((item, index) => (
+                  <motion.div
                     key={item._id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
                     className="flex gap-4 border-b last:border-0 pb-4"
                   >
                     <img
@@ -125,34 +153,39 @@ export default function CheckoutReview() {
                       className="w-20 h-20 object-cover bg-gray-100"
                     />
                     <div className="flex-1">
-                      <p className="font-medium text-black">
+                      <p className="font-medium text-gray-900">
                         {item.name}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-[#8c8275]">
                         Qty: {item.quantity}
                       </p>
-                      <p className="text-sm text-gray-700 mt-1">
+                      <p className="text-sm text-[#6f6451] mt-1">
                         ₹{item.price.toFixed(2)}
                       </p>
                     </div>
-                    <div className="font-medium text-black">
+                    <div className="font-medium text-gray-900">
                       ₹{(item.price * item.quantity).toFixed(2)}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Summary */}
-          <div className="lg:col-span-1">
+          {/* SUMMARY */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-1"
+          >
             <div className="bg-white border border-gray-200 p-6 sticky top-24">
-              <h2 className="flex items-center gap-2 font-medium text-black mb-4">
+              <h2 className="flex items-center gap-2 font-medium text-gray-900 mb-4">
                 <ShoppingBag className="h-5 w-5" />
                 Order Summary
               </h2>
 
-              <div className="space-y-3 text-sm">
+              <div className="space-y-3 text-sm text-[#6f6451]">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
                   <span>₹{subtotal.toFixed(2)}</span>
@@ -162,7 +195,7 @@ export default function CheckoutReview() {
                   <span>Free</span>
                 </div>
 
-                <div className="border-t pt-3 flex justify-between text-lg font-medium">
+                <div className="border-t pt-3 flex justify-between text-lg font-medium text-gray-900">
                   <span>Total</span>
                   <span>₹{total.toFixed(2)}</span>
                 </div>
@@ -170,15 +203,15 @@ export default function CheckoutReview() {
 
               <button
                 onClick={() => router.push("/checkout/payment")}
-                className="w-full bg-[#867964] text-white py-3 mt-6 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full bg-[#605441] text-white py-3 mt-6 flex items-center hover:bg-[#736958] justify-center gap-2 cursor-pointer transition"
               >
                 Continue to Payment <ArrowRight className="h-4 w-4" />
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -186,7 +219,7 @@ export default function CheckoutReview() {
 
 function CheckoutSteps() {
   return (
-    <div className="flex items-center justify-between mb-10 text-sm">
+    <div className="flex items-center justify-between mb-10 text-sm font-semibold">
       <Step done label="Address" />
       <Line done />
       <Step active label="Review" />
@@ -198,10 +231,18 @@ function CheckoutSteps() {
 
 function Step({ label, active, done }) {
   return (
-    <div className={`flex items-center ${active || done ? "text-black" : "text-gray-400"}`}>
+    <div
+      className={`flex items-center ${
+        active || done ? "text-gray-900" : "text-[#8c8275]"
+      }`}
+    >
       <span
         className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
-        ${done || active ? "bg-[#867964] text-white" : "bg-gray-200"}`}
+        ${
+          done || active
+            ? "bg-[#867964] text-white"
+            : "bg-[#e6e1d8] text-[#6f6451]"
+        }`}
       >
         {done ? "✓" : label[0]}
       </span>
@@ -212,6 +253,10 @@ function Step({ label, active, done }) {
 
 function Line({ done }) {
   return (
-    <div className={`flex-1 h-px mx-4 ${done ? "bg-[#867964]" : "bg-gray-300"}`} />
+    <div
+      className={`flex-1 h-px mx-4 ${
+        done ? "bg-[#867964]" : "bg-[#d8d2c6]"
+      }`}
+    />
   );
 }
