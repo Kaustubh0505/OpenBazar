@@ -53,7 +53,7 @@ const seedData = async () => {
             {
                 name: "Classic White Essential Tee",
                 description: "A timeless classic. Made from 100% Supima cotton for an ultra-soft feel. Minimalist design suitable for any occasion.",
-                price: 1299,
+                price: 299,
                 image_url: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["T-Shirts"],
                 stock: 50,
@@ -64,7 +64,7 @@ const seedData = async () => {
             {
                 name: "Midnight Black Crew Neck",
                 description: "Deep black hue that stays true wash after wash. Tailored fit to accentuate your physique.",
-                price: 1499,
+                price: 499,
                 image_url: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["T-Shirts"],
                 stock: 45,
@@ -75,7 +75,7 @@ const seedData = async () => {
             {
                 name: "Urban Grey Streetwear Tee",
                 description: "Heavyweight cotton with a boxy fit. Perfect for the modern streetwear aesthetic.",
-                price: 1899,
+                price: 799,
                 image_url: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["T-Shirts"],
                 stock: 30,
@@ -86,7 +86,7 @@ const seedData = async () => {
             {
                 name: "Navy Blue V-Neck",
                 description: "Elegant V-neck cut. Breathable fabric ideal for summer days.",
-                price: 1399,
+                price: 699,
                 image_url: "https://images.unsplash.com/photo-1554568218-0f1715e72254?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["T-Shirts"],
                 stock: 60,
@@ -99,7 +99,7 @@ const seedData = async () => {
             {
                 name: "Oxford Cotton White Shirt",
                 description: "The quintessential white shirt. Crisp, clean, and professional. Features a button-down collar.",
-                price: 2499,
+                price: 899,
                 image_url: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Shirts"],
                 stock: 25,
@@ -110,7 +110,7 @@ const seedData = async () => {
             {
                 name: "Charcoal Formal Shirt",
                 description: "A dark grey shirt for evening wear or serious business meetings. Wrinkle-resistant fabric.",
-                price: 2799,
+                price: 999,
                 image_url: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Shirts"],
                 stock: 20,
@@ -121,7 +121,7 @@ const seedData = async () => {
             {
                 name: "Casual Denim Shirt",
                 description: "Rugged yet refined. Soft-washed denim that pairs perfectly with chinos or jeans.",
-                price: 2999,
+                price: 1999,
                 image_url: "https://images.unsplash.com/photo-1582538885592-e70a5d7ab3d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Shirts"],
                 stock: 35,
@@ -132,7 +132,7 @@ const seedData = async () => {
             {
                 name: "Striped Business Premium",
                 description: "Subtle vertical stripes to elongate the torso. Finest Egyptian cotton.",
-                price: 3299,
+                price: 289,
                 image_url: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Shirts"],
                 stock: 15,
@@ -145,7 +145,7 @@ const seedData = async () => {
             {
                 name: "Royal Chronograph Gold",
                 description: "A statement piece. Gold-plated stainless steel with a precision chronograph movement.",
-                price: 15999,
+                price: 2999,
                 image_url: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Watches"],
                 stock: 10,
@@ -156,7 +156,7 @@ const seedData = async () => {
             {
                 name: "Minimalist Leather Strap",
                 description: "Understated elegance. Genuine leather strap with a clean white dial.",
-                price: 8499,
+                price: 1999,
                 image_url: "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Watches"],
                 stock: 12,
@@ -167,7 +167,7 @@ const seedData = async () => {
             {
                 name: "Diver Master Pro",
                 description: "Water-resistant up to 200m. Robust build for the adventurous soul.",
-                price: 12499,
+                price: 999,
                 image_url: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Watches"],
                 stock: 8,
@@ -178,7 +178,7 @@ const seedData = async () => {
             {
                 name: "Vintage Silver Automatic",
                 description: "Classic mechanical movement. A tribute to horological history.",
-                price: 18999,
+                price: 3999,
                 image_url: "https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Watches"],
                 stock: 5,
@@ -191,7 +191,7 @@ const seedData = async () => {
             {
                 name: "Urban Runner 500",
                 description: "Lightweight mesh upper with responsive cushioning for city running.",
-                price: 4999,
+                price: 1899,
                 image_url: "https://images.unsplash.com/photo-1622760807301-4d2351a5a942?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Sneakers"],
                 stock: 20,
@@ -202,7 +202,7 @@ const seedData = async () => {
             {
                 name: "Street Hi-Tops",
                 description: "Classic basketball-inspired silhouette remixed for the streets.",
-                price: 6499,
+                price: 1199,
                 image_url: "https://images.unsplash.com/photo-1622760808027-095ea611f657?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Sneakers"],
                 stock: 15,
@@ -213,7 +213,7 @@ const seedData = async () => {
             {
                 name: "Limited Edition Trainers",
                 description: "Exclusive colorway with premium suede accents.",
-                price: 8999,
+                price: 1199,
                 image_url: "https://images.unsplash.com/photo-1622760806530-3cb6301c087d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Sneakers"],
                 stock: 8,
@@ -226,7 +226,7 @@ const seedData = async () => {
             {
                 name: "Black Leather Moto Jacket",
                 description: "Genuine leather with asymmetrical zipper. A rebellious classic.",
-                price: 12999,
+                price: 1399,
                 image_url: "https://images.unsplash.com/photo-1727518154538-59e7dc479f8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Jackets"],
                 stock: 10,
@@ -237,7 +237,7 @@ const seedData = async () => {
             {
                 name: "Vintage Bomber Jacket",
                 description: "Insulated nylon bomber to keep you warm and stylish.",
-                price: 5499,
+                price: 1289,
                 image_url: "https://images.unsplash.com/photo-1675877879221-871aa9f7c314?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Jackets"],
                 stock: 18,
@@ -250,7 +250,7 @@ const seedData = async () => {
             {
                 name: "Explorer Canvas Backpack",
                 description: "Rugged canvas with leather straps. Perfect for weekend getaways.",
-                price: 3999,
+                price: 1099,
                 image_url: "https://images.unsplash.com/photo-1583300418584-8332e32b710e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Backpacks"],
                 stock: 25,
@@ -261,7 +261,7 @@ const seedData = async () => {
             {
                 name: "Tech Commuter Pack",
                 description: "Water-resistant with padded laptop compartment. Minimalist urban design.",
-                price: 4499,
+                price: 2899,
                 image_url: "https://images.unsplash.com/photo-1579718080147-0fef34dc9529?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Backpacks"],
                 stock: 30,
@@ -274,7 +274,7 @@ const seedData = async () => {
             {
                 name: "Aviator Gold Classics",
                 description: "The pilot style that never goes out of fashion. UV400 protection.",
-                price: 2499,
+                price: 99,
                 image_url: "https://images.unsplash.com/photo-1711223499758-8aef018b720e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Sunglasses"],
                 stock: 40,
@@ -285,7 +285,7 @@ const seedData = async () => {
             {
                 name: "Modern Wayfarer Matte",
                 description: "Matte black finish with polarized lenses for glare reduction.",
-                price: 2999,
+                price: 199,
                 image_url: "https://images.unsplash.com/photo-1654274285614-37cad6007665?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
                 category_id: catMap["Sunglasses"],
                 stock: 35,

@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, ShoppingBag, PackageX } from "lucide-react";
 import { useCart } from "../context/CartContext";
-
 import { Navbar } from "../components/Navbar";
 
 export default function ThriftStorePage() {
@@ -33,7 +32,6 @@ export default function ThriftStorePage() {
     }
   };
 
-
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f7f5f2] flex items-center justify-center">
@@ -46,10 +44,20 @@ export default function ThriftStorePage() {
     <div className="min-h-screen flex flex-col bg-[#f7f5f2]">
       <Navbar
         categories={[]}
-        onCategorySelect={() => { }}
-        onSearch={() => { }}
-        onCartClick={() => { }}
+        onCategorySelect={() => {}}
+        onSearch={() => {}}
+        onCartClick={() => {}}
       />
+
+      {/* 🔙 Back to Home */}
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6">
+        <button
+          onClick={() => router.push("/homePage")}
+          className="text-[#6f6451] hover:underline cursor-pointer"
+        >
+          ← Back to Home
+        </button>
+      </div>
 
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}

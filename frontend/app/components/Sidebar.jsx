@@ -43,7 +43,7 @@ export function Sidebar({ categories, selectedCategory, onCategorySelect }) {
             <button
               onClick={() => onCategorySelect(category._id)}
               className={`
-                w-full text-left px-4 py-2 text-sm transition font-semibold cursor-pointer
+                w-full text-left px-4 py-2 text-sm transition cursor-pointer
                 ${selectedCategory === category._id
                   ? "bg-[#6f6451] text-white"
                   : "text-gray-700 hover:bg-[#d2cac0]"

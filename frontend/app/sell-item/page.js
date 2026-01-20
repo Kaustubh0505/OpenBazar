@@ -114,10 +114,10 @@ export default function SellItemPage() {
         <div className="text-center mb-10">
           <div className="flex justify-start mb-4">
             <button
-              onClick={() => router.push("/thrift-store")}
+              onClick={() => router.push("/homePage")}
               className="text-gray-500 hover:text-black cursor-pointer"
             >
-              &larr; Back to Thrift Store
+              &larr; Back to Home
             </button>
           </div>
           <h1 className="text-3xl font-light text-black mb-2">

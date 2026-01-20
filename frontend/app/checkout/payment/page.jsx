@@ -33,6 +33,10 @@ export default function CheckoutPayment() {
     }
   }, []);
 
+  const handleComingSoon = (method) => {
+    alert(`${method} payment is coming soon 🚀`);
+  };
+
   const handlePlaceOrder = async () => {
     try {
       setLoading(true);
@@ -91,32 +95,18 @@ export default function CheckoutPayment() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.6 }}
       className="min-h-screen bg-[#f7f5f2] py-12 px-4"
     >
-      <motion.div
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="max-w-2xl mx-auto"
-      >
-        {/* Progress */}
+      <div className="max-w-2xl mx-auto">
         <CheckoutSteps />
 
-        {/* Back */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-6"
+        <button
+          onClick={() => router.push("/checkout/review")}
+          className="text-[#6f6451] hover:underline mb-6 cursor-pointer"
         >
-          <button
-            onClick={() => router.push("/checkout/review")}
-            className="text-[#6f6451] hover:underline flex items-center gap-2 cursor-pointer"
-          >
-            ← Back to Review
-          </button>
-        </motion.div>
+          ← Back to Review
+        </button>
 
         <h1 className="text-2xl font-light text-gray-900 mb-6">
           Payment Method
@@ -134,6 +124,7 @@ export default function CheckoutPayment() {
           className="bg-white border border-gray-200 p-6 mb-8"
         >
           <div className="space-y-4">
+            {/* COD */}
             <PaymentOption
               active={selectedMethod === "COD"}
               onClick={() => setSelectedMethod("COD")}
@@ -142,7 +133,25 @@ export default function CheckoutPayment() {
               subtitle="Pay when you receive your order"
             />
 
-            <div className="opacity-40 border p-4 flex items-center gap-4 cursor-not-allowed">
+            {/* UPI (Clickable) */}
+            <div
+              onClick={() => handleComingSoon("UPI")}
+              className="border p-4 flex items-center gap-4 cursor-pointer opacity-60 hover:bg-[#f7f5f2] transition"
+            >
+              <CreditCard className="h-6 w-6 text-[#8c8275]" />
+              <div>
+                <p className="font-medium text-gray-900">UPI</p>
+                <p className="text-sm text-[#8c8275]">
+                  Pay through QR code (Coming soon)
+                </p>
+              </div>
+            </div>
+
+            {/* Card (Clickable) */}
+            <div
+              onClick={() => handleComingSoon("Card")}
+              className="border p-4 flex items-center gap-4 cursor-pointer opacity-60 hover:bg-[#f7f5f2] transition"
+            >
               <CreditCard className="h-6 w-6 text-[#8c8275]" />
               <div>
                 <p className="font-medium text-gray-900">
@@ -157,10 +166,7 @@ export default function CheckoutPayment() {
         </motion.div>
 
         {/* CTA */}
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
+        <button
           onClick={handlePlaceOrder}
           disabled={loading}
           className="w-full text-white bg-[#605441] py-4 text-lg font-medium hover:bg-[#736958] cursor-pointer disabled:opacity-50"
@@ -173,13 +179,13 @@ export default function CheckoutPayment() {
           ) : (
             `Place Order ₹${getTotalPrice().toFixed(2)}`
           )}
-        </motion.button>
-      </motion.div>
+        </button>
+      </div>
     </motion.div>
   );
 }
 
-/* ---------------- Components ---------------- */
+/* ---------------- Steps ---------------- */
 
 function CheckoutSteps() {
   return (
@@ -195,18 +201,10 @@ function CheckoutSteps() {
 
 function Step({ label, active, done }) {
   return (
-    <div
-      className={`flex items-center ${
-        active || done ? "text-gray-900" : "text-[#8c8275]"
-      }`}
-    >
+    <div className={`flex items-center ${active || done ? "text-gray-900" : "text-[#8c8275]"}`}>
       <span
         className={`w-8 h-8 flex items-center justify-center rounded-full mr-2
-        ${
-          done || active
-            ? "bg-[#6f6451] text-white"
-            : "bg-[#e6e1d8] text-[#6f6451]"
-        }`}
+        ${done || active ? "bg-[#6f6451] text-white" : "bg-[#e6e1d8] text-[#6f6451]"}`}
       >
         {done ? "✓" : label[0]}
       </span>
@@ -217,11 +215,7 @@ function Step({ label, active, done }) {
 
 function Line({ done }) {
   return (
-    <div
-      className={`flex-1 h-px mx-4 ${
-        done ? "bg-[#6f6451]" : "bg-[#d8d2c6]"
-      }`}
-    />
+    <div className={`flex-1 h-px mx-4 ${done ? "bg-[#6f6451]" : "bg-[#d8d2c6]"}`} />
   );
 }
 
@@ -230,11 +224,7 @@ function PaymentOption({ active, onClick, icon, title, subtitle }) {
     <div
       onClick={onClick}
       className={`border p-4 flex items-center gap-4 cursor-pointer transition
-      ${
-        active
-          ? "border-[#6f6451] bg-[#f7f5f2]"
-          : "hover:border-[#8c8275]"
-      }`}
+      ${active ? "border-[#6f6451] bg-[#f7f5f2]" : "hover:border-[#8c8275]"}`}
     >
       {icon}
       <div>
