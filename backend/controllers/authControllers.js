@@ -122,10 +122,26 @@ export const sendOtp = async (req, res) => {
 
 
         await sendEmail({
-            to: `${email}`,
-            subject: "OTP verification for OpenBazaar",
-            text: `Message from OpenBazaar.Your OTP for email verification is ${otp} is valid for 5 minutes`,
-        });
+            to: email,
+            subject: "Your OTP for OpenBazaar Email Verification",
+            text: `
+          Hello,
+          
+          Thank you for signing up with OpenBazaar.
+          
+          Your One-Time Password (OTP) for email verification is:
+          
+          ${otp}
+          
+          This OTP is valid for 5 minutes. Please do not share it with anyone.
+          
+          If you did not request this verification, please ignore this email.
+          
+          Best regards,
+          OpenBazaar Team
+            `,
+          });
+          
 
 
 
