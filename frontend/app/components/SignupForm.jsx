@@ -90,28 +90,34 @@ export default function SignupForm() {
   /* ================= GOOGLE OAUTH ================= */
   const handleGoogleSuccess = async (credentialResponse) => {
     setError("");
+  
     try {
       setLoading(true);
+  
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/google`,
-        { token: credentialResponse.credential }
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/google-login`,
+        {
+          credential: credentialResponse.credential,
+        }
       );
-
+  
       localStorage.setItem("token", res.data.token);
-
+  
       if (cart.length > 0) {
         await syncCartWithDB(cart);
       } else {
         await fetchCartFromDB();
       }
-
+  
       router.push("/homePage");
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError("Google signup failed");
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <motion.div

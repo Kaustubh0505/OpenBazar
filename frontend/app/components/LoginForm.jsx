@@ -38,8 +38,8 @@ export default function LoginForm() {
       setLoading(true);
 
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/google`,
-        { token: credentialResponse.credential }
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/auth/google-login`,
+        { credential: credentialResponse.credential }
       );
 
       localStorage.setItem("token", res.data.token);

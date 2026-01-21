@@ -22,7 +22,7 @@ router.post("/login/send-otp", sendLoginOtp);
 router.post("/login/verify-otp", verifyLoginOtp);
 
 /* GOOGLE LOGIN */
-router.post("/google", googleLogin);
+router.post("/google-login", googleLogin);
 
 
 

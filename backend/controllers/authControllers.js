@@ -10,45 +10,46 @@ import bcrypt from "bcryptjs";
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
-// Google Login Controller
 export const googleLogin = async (req, res) => {
-    const { token } = req.body;
-
     try {
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
+        const { credential } = req.body;
 
-        const { name, email, picture, sub: googleId } = ticket.getPayload();
+        if (!credential) {
+            return res.status(400).json({
+                message: "Google ID token (credential) missing",
+            });
+        }
+
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        })
+
+
+        const payload = ticket.getPayload();
+        const { email, name, picture } = payload;
+
 
         let user = await User.findOne({ email });
 
-        if (user) {
-            // Link Google ID if not already linked
-            if (!user.googleId) {
-                user.googleId = googleId;
-                await user.save();
-            }
-        } else {
+        if (!user) {
             // Create new user
+            const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPass = await bcrypt.hash(randomPassword, 10);
+
             user = new User({
                 name,
                 email,
-                googleId,
-                profilePicture: picture,
-                role: "buyer", // Default role
-                isVerified: true, // Google emails are verified
-                isEmailVerified: true,
+                password: hashedPass,
+                role: "buyer", 
+                isEmailVerified: true, 
             });
+
             await user.save();
         }
 
-        if (user.isBlocked) {
-            return res.status(403).json({ message: "Your account has been blocked." });
-        }
-
-        const jwtToken = jwt.sign(
+        // Generate Token
+        const token = jwt.sign(
             { id: user._id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
@@ -56,21 +57,22 @@ export const googleLogin = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            token: jwtToken,
+            token,
             user: {
                 id: user._id,
                 name: user.name,
                 email: user.email,
                 role: user.role,
-                image: user.profilePicture,
+                picture: picture,
             },
         });
 
     } catch (error) {
         console.error("Google Login Error:", error);
-        return res.status(500).json({ message: "Google login failed", error: error.message });
+        res.status(500).json({ message: "Google login failed" });
     }
 };
+
 
 
 //signup otp
