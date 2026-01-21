@@ -27,8 +27,13 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       select: false,
+    },
+    googleId: {
+      type: String,
+    },
+    profilePicture: {
+      type: String,
     },
     isEmailVerified: {
       type: Boolean,

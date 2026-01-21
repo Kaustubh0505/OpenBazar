@@ -3,8 +3,74 @@ import { generateOtp } from "../utils/GenerateOtp.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
 import { sendEmail } from "../utils/sendEmail.js";
+import { OAuth2Client } from "google-auth-library"; // Import Google Auth Library
 dotenv.config()
 import bcrypt from "bcryptjs";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+
+// Google Login Controller
+export const googleLogin = async (req, res) => {
+    const { token } = req.body;
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const { name, email, picture, sub: googleId } = ticket.getPayload();
+
+        let user = await User.findOne({ email });
+
+        if (user) {
+            // Link Google ID if not already linked
+            if (!user.googleId) {
+                user.googleId = googleId;
+                await user.save();
+            }
+        } else {
+            // Create new user
+            user = new User({
+                name,
+                email,
+                googleId,
+                profilePicture: picture,
+                role: "buyer", // Default role
+                isVerified: true, // Google emails are verified
+                isEmailVerified: true,
+            });
+            await user.save();
+        }
+
+        if (user.isBlocked) {
+            return res.status(403).json({ message: "Your account has been blocked." });
+        }
+
+        const jwtToken = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
+
+        return res.status(200).json({
+            success: true,
+            token: jwtToken,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                image: user.profilePicture,
+            },
+        });
+
+    } catch (error) {
+        console.error("Google Login Error:", error);
+        return res.status(500).json({ message: "Google login failed", error: error.message });
+    }
+};
 
 
 //signup otp

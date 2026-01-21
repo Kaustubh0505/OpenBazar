@@ -46,12 +46,6 @@ export default function AdminDashboard() {
         <div className="min-h-screen bg-gray-100 p-8">
             <div className="max-w-6xl mx-auto">
                 <div className="flex items-center gap-4 mb-8">
-                    <button
-                        onClick={() => router.push("/homePage")}
-                        className="text-gray-500 hover:text-black cursor-pointer"
-                    >
-                        &larr; Back to Home
-                    </button>
                     <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
                 </div>
 

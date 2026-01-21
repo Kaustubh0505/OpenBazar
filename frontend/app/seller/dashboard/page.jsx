@@ -199,7 +199,7 @@ export default function SellerDashboard() {
                       </td>
 
                       {/* NAME */}
-                      <td className="px-6 py-4 font-medium text-black">
+                      <td className="px-6 py-4 font-semibold text-black">
                         {p.name}
                         {p.stock === 0 && (
                           <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-700 text-[10px] rounded-full uppercase tracking-wider font-bold">
@@ -209,12 +209,12 @@ export default function SellerDashboard() {
                       </td>
 
                       {/* PRICE */}
-                      <td className="px-6 py-4 text-gray-700">
+                      <td className="px-6 py-4 font-semibold text-gray-700">
                         ₹{p.price}
                       </td>
 
                       {/* STOCK (Editable) */}
-                      <td className="px-6 py-4 text-gray-700">
+                      <td className="px-6 py-4 font-semibold text-gray-700">
                         {editingStockId === p._id ? (
                           <div className="flex items-center gap-2">
                             <input

@@ -62,7 +62,7 @@ export default function ThriftStorePage() {
       <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-light text-black mb-3">
+          <h1 className="text-4xl font-semibold text-black mb-3">
             Thrift Store
           </h1>
           <p className="text-sm text-gray-600 mb-6">
@@ -100,11 +100,11 @@ export default function ThriftStorePage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {items.map((item) => (
               <div
                 key={item._id}
-                className="bg-white border border-gray-200 hover:shadow-lg transition"
+                className="bg-white border border-gray-200 rounded-2xl hover:shadow-lg transition"
               >
                 {/* Image */}
                 <div className="aspect-square bg-[#f7f5f2]">
