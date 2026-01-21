@@ -6,6 +6,9 @@ import {
   sendLoginOtp,
   verifyLoginOtp,
   googleLogin,
+  forgotPassword,
+  resetPassword,
+  verifyResetOtp,
 } from "../controllers/authControllers.js";
 
 const router = express.Router();
@@ -23,6 +26,11 @@ router.post("/login/verify-otp", verifyLoginOtp);
 
 /* GOOGLE LOGIN */
 router.post("/google-login", googleLogin);
+
+/* FORGOT PASSWORD */
+router.post("/forgot-password", forgotPassword);
+router.post("/verify-reset-otp", verifyResetOtp);
+router.post("/reset-password", resetPassword);
 
 
 

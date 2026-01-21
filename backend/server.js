@@ -10,6 +10,8 @@ import cartRoutes from "./routes/cartRoutes.js";
 import thriftItemRoutes from "./routes/thriftItemRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import bannerRoutes from "./routes/bannerRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+// import razorpay from "./config/razorpay.js";
 
 dotenv.config();
 const app = express();
@@ -36,6 +38,8 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/thrift", thriftItemRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/banners", bannerRoutes);
+app.use("/api/payment", paymentRoutes);
+
 
 
 

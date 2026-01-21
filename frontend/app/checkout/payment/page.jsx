@@ -33,11 +33,117 @@ export default function CheckoutPayment() {
     }
   }, []);
 
-  const handleComingSoon = (method) => {
-    alert(`${method} payment is coming soon 🚀`);
+  const handleRazorpayPayment = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/auth/login");
+        return;
+      }
+
+      const shippingAddress = JSON.parse(
+        sessionStorage.getItem("shippingAddress")
+      );
+
+      if (!shippingAddress) {
+        setError("Shipping address missing");
+        return;
+      }
+
+      const items = cart.map((item) => ({
+        product: item._id,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const totalAmount = getTotalPrice();
+
+      // Create Razorpay order
+      const orderRes = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKENDURL}/api/payment/create-order`,
+        {
+          items,
+          shippingAddress,
+          totalAmount,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const { orderId, amount, currency, keyId } = orderRes.data;
+
+      if (!keyId) {
+        setError("Razorpay is not configured. Please add RAZORPAY_KEY_ID in environment variables.");
+        setLoading(false);
+        return;
+      }
+
+      // Initialize Razorpay
+      const options = {
+        key: keyId,
+        amount: amount,
+        currency: currency,
+        name: "OpenBazar",
+        description: "Order Payment",
+        order_id: orderId,
+        handler: async function (response) {
+          try {
+            // Verify payment
+            const verifyRes = await axios.post(
+              `${process.env.NEXT_PUBLIC_BACKENDURL}/api/payment/verify`,
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                items,
+                shippingAddress,
+                totalAmount,
+              },
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            clearCart();
+            sessionStorage.removeItem("shippingAddress");
+            router.push(`/checkout/success?orderId=${verifyRes.data.orderId}`);
+          } catch (err) {
+            setError(
+              err.response?.data?.message || "Payment verification failed"
+            );
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: shippingAddress.fullName,
+          email: "",
+          contact: shippingAddress.phone,
+        },
+        theme: {
+          color: "#605441",
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          }
+        }
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to initiate payment"
+      );
+      setLoading(false);
+    }
   };
 
-  const handlePlaceOrder = async () => {
+  const handleCODOrder = async () => {
     try {
       setLoading(true);
       setError("");
@@ -71,7 +177,7 @@ export default function CheckoutPayment() {
           items,
           shippingAddress,
           totalAmount,
-          paymentMethod: selectedMethod,
+          paymentMethod: "COD",
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -88,6 +194,14 @@ export default function CheckoutPayment() {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePlaceOrder = () => {
+    if (selectedMethod === "Razorpay") {
+      handleRazorpayPayment();
+    } else {
+      handleCODOrder();
     }
   };
 
@@ -133,35 +247,14 @@ export default function CheckoutPayment() {
               subtitle="Pay when you receive your order"
             />
 
-            {/* UPI (Clickable) */}
-            <div
-              onClick={() => handleComingSoon("UPI")}
-              className="border p-4 flex items-center gap-4 cursor-pointer opacity-60 hover:bg-[#f7f5f2] transition"
-            >
-              <CreditCard className="h-6 w-6 text-[#8c8275]" />
-              <div>
-                <p className="font-medium text-gray-900">UPI</p>
-                <p className="text-sm text-[#8c8275]">
-                  Pay through QR code (Coming soon)
-                </p>
-              </div>
-            </div>
-
-            {/* Card (Clickable) */}
-            <div
-              onClick={() => handleComingSoon("Card")}
-              className="border p-4 flex items-center gap-4 cursor-pointer opacity-60 hover:bg-[#f7f5f2] transition"
-            >
-              <CreditCard className="h-6 w-6 text-[#8c8275]" />
-              <div>
-                <p className="font-medium text-gray-900">
-                  Credit / Debit Card
-                </p>
-                <p className="text-sm text-[#8c8275]">
-                  Coming soon
-                </p>
-              </div>
-            </div>
+            {/* Razorpay (UPI, Cards, Wallets) */}
+            <PaymentOption
+              active={selectedMethod === "Razorpay"}
+              onClick={() => setSelectedMethod("Razorpay")}
+              icon={<CreditCard className="h-6 w-6 text-[#6f6451]" />}
+              title="Online Payment (UPI / Card / Wallet)"
+              subtitle="Pay securely via Razorpay"
+            />
           </div>
         </motion.div>
 
@@ -174,7 +267,7 @@ export default function CheckoutPayment() {
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <Loader2 className="h-5 w-5 animate-spin" />
-              Placing order...
+              {selectedMethod === "Razorpay" ? "Opening payment..." : "Placing order..."}
             </span>
           ) : (
             `Place Order ₹${getTotalPrice().toFixed(2)}`

@@ -41,8 +41,8 @@ export const googleLogin = async (req, res) => {
                 name,
                 email,
                 password: hashedPass,
-                role: "buyer", 
-                isEmailVerified: true, 
+                role: "buyer",
+                isEmailVerified: true,
             });
 
             await user.save();
@@ -105,7 +105,9 @@ export const sendOtp = async (req, res) => {
                 email,
                 phone,
                 password: hashedPass,
-                otp,
+                phone,
+                password: hashedPass,
+                otp: await bcrypt.hash(otp, 10), // Hash OTP
                 otpExpiry,
                 role: role || "buyer",
             });
@@ -113,7 +115,9 @@ export const sendOtp = async (req, res) => {
             user.name = name;
             user.email = email;
             user.password = password;
-            user.otp = otp;
+            // Hashing OTP before storage for security
+            const hashedOtp = await bcrypt.hash(otp, 10);
+            user.otp = hashedOtp;
             user.otpExpiry = otpExpiry;
             if (role) user.role = role;
         }
@@ -128,20 +132,17 @@ export const sendOtp = async (req, res) => {
           Hello,
           
           Thank you for signing up with OpenBazaar.
-          
           Your One-Time Password (OTP) for email verification is:
-          
           ${otp}
-          
           This OTP is valid for 5 minutes. Please do not share it with anyone.
-          
+
           If you did not request this verification, please ignore this email.
-          
+
           Best regards,
           OpenBazaar Team
             `,
-          });
-          
+        });
+
 
 
 
@@ -166,7 +167,12 @@ export const verifyOtp = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        if (!user.otp || user.otp !== otp || user.otpExpiry < Date.now()) {
+        if (!user.otp || user.otpExpiry < Date.now()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        const isOtpValid = await bcrypt.compare(otp, user.otp);
+        if (!isOtpValid) {
             return res.status(400).json({ message: "Invalid or expired OTP" });
         }
 
@@ -277,7 +283,8 @@ export const sendLoginOtp = async (req, res) => {
         const otp = generateOtp();
         const otpExpiry = Date.now() + 5 * 60 * 1000;
 
-        user.otp = otp;
+        const hashedOtp = await bcrypt.hash(otp, 10);
+        user.otp = hashedOtp;
         user.otpExpiry = otpExpiry;
         await user.save();
 
@@ -311,7 +318,11 @@ export const verifyLoginOtp = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        if (!user.otp || user.otp !== otp || user.otpExpiry < Date.now()) {
+        if (!user.otp || user.otpExpiry < Date.now()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+        const isOtpValid = await bcrypt.compare(otp, user.otp);
+        if (!isOtpValid) {
             return res.status(400).json({ message: "Invalid or expired OTP" });
         }
 
@@ -335,6 +346,128 @@ export const verifyLoginOtp = async (req, res) => {
                 phone: user.phone,
                 role: user.role,
             },
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// Forgot Password - Send OTP
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const otp = generateOtp();
+        const otpExpiry = Date.now() + 5 * 60 * 1000; // 5 minutes
+
+        const hashedOtp = await bcrypt.hash(otp, 10);
+        user.otp = hashedOtp;
+        user.otpExpiry = otpExpiry;
+        await user.save();
+
+        await sendEmail({
+            to: email,
+            subject: "Reset Password OTP - OpenBazaar",
+            text: `
+          Hello ${user.name},
+
+          You requested to reset your password.
+          Your One-Time Password (OTP) is:
+          ${otp}
+          This OTP is valid for 5 minutes.
+          
+          If you did not request this, please ignore this email.
+          
+          Best,
+          OpenBazaar Team
+            `,
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "OTP sent to your email",
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// Verify Reset OTP (Intermediate step)
+export const verifyResetOtp = async (req, res) => {
+    const { email, otp } = req.body;
+
+    try {
+        if (!email || !otp) {
+            return res.status(400).json({ message: "Email and OTP are required" });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (!user.otp || user.otpExpiry < Date.now()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        const isOtpValid = await bcrypt.compare(otp, user.otp);
+        if (!isOtpValid) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "OTP verified successfully",
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+// Reset Password - Verify OTP and Set New Password
+export const resetPassword = async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+
+    try {
+        if (!email || !otp || !newPassword) {
+            return res.status(400).json({ message: "Email, OTP, and new password are required" });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (!user.otp || user.otpExpiry < Date.now()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+        const isOtpValid = await bcrypt.compare(otp, user.otp);
+        if (!isOtpValid) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        const hashedPass = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPass;
+        user.otp = undefined;
+        user.otpExpiry = undefined;
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Password reset successfully. You can now login.",
         });
     } catch (error) {
         return res.status(500).json({ message: error.message });
